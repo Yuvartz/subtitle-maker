@@ -1,0 +1,13 @@
+node_modules/
+output/
+uploads/
+__pycache__/
+*.pyc
+.claude/
+separated/
+*.zip
+*.wav
+example-subs.txt
+subs.txt
+sample-preview.js
+generate-subs.js
