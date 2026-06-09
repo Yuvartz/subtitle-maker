@@ -2526,12 +2526,9 @@
     const EASTER_EGG_PHRASE = 'עומר זייטמן נשמה';
     let easterEggTriggered = false;
 
-    // Check if already unlocked from a previous visit
-    try {
-      if (localStorage.getItem('submaker-terminal-unlocked') === 'true') {
-        document.getElementById('themeTerminal').classList.add('unlocked');
-      }
-    } catch(e) {}
+    // The Terminal button stays HIDDEN on every page load. It is revealed only
+    // when the easter egg ("עומר זייטמן נשמה") is typed during this session, and
+    // hides again on the next load. The unlock is intentionally NOT persisted.
 
     function checkEasterEgg() {
       if (easterEggTriggered) return;
@@ -2621,12 +2618,11 @@
         }
       }, 1500);
 
-      // 5. Unlock terminal theme after animation
+      // 5. Reveal terminal theme after animation (this session only — not persisted)
       setTimeout(() => {
         overlay.remove();
         const btn = document.getElementById('themeTerminal');
         btn.classList.add('unlocked');
-        try { localStorage.setItem('submaker-terminal-unlocked', 'true'); } catch(e) {}
         // Auto-switch to terminal as a reveal
         setTheme('terminal');
       }, 4500);
