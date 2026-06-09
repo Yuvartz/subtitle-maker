@@ -34,18 +34,38 @@
       gap: 6px;
     }
     .theme-btn {
-      width: 42px; height: 42px;
+      width: 46px; height: 46px;
       border: 2px solid #00ffcc;
-      background: rgba(0,0,0,0.75);
+      border-radius: 12px;
+      background: rgba(0,0,0,0.8);
       color: #00ffcc;
       font-size: 14px;
       cursor: pointer;
       display: grid;
       place-items: center;
-      transition: all 0.2s;
+      transition: all 0.25s;
       font-family: 'Press Start 2P', monospace;
       box-shadow: 0 0 15px rgba(0,255,204,0.3), inset 0 0 10px rgba(0,255,204,0.1);
+      position: relative;
     }
+    .theme-btn svg { display: block; }
+    .theme-btn::after {
+      content: attr(title);
+      position: absolute;
+      left: 54px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-family: 'Inter', 'Heebo', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 600;
+      white-space: nowrap;
+      color: inherit;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+    }
+    .theme-btn:hover::after { opacity: 1; }
     .theme-btn:hover {
       border-color: #ff0066;
       color: #ff0066;
@@ -760,6 +780,81 @@
       transition: width 0.3s;
     }
 
+    /* ===== EASTER EGG: LOCKED THEME ===== */
+    .theme-btn-locked {
+      display: none !important;
+    }
+    .theme-btn-locked.unlocked {
+      display: grid !important;
+      animation: unlockReveal 0.6s ease-out;
+    }
+    @keyframes unlockReveal {
+      0% { transform: scale(0) rotate(-180deg); opacity: 0; }
+      60% { transform: scale(1.3) rotate(10deg); opacity: 1; }
+      100% { transform: scale(1) rotate(0deg); opacity: 1; }
+    }
+
+    /* נשמה explosion overlay */
+    .neshama-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .neshama-word {
+      position: absolute;
+      font-family: 'Heebo', sans-serif;
+      font-weight: 900;
+      color: #33ff33;
+      white-space: nowrap;
+      animation: neshamaFloat var(--dur) ease-out forwards;
+      text-shadow: 0 0 20px rgba(51,255,51,0.8), 0 0 40px rgba(51,255,51,0.4), 0 0 80px rgba(51,255,51,0.2);
+      opacity: 0;
+    }
+    @keyframes neshamaFloat {
+      0% { transform: scale(0) rotate(var(--rot)); opacity: 0; }
+      15% { opacity: 1; }
+      50% { transform: scale(var(--sc)) rotate(calc(var(--rot) * 0.3)); opacity: 0.9; }
+      100% { transform: scale(calc(var(--sc) * 0.5)) rotate(0deg) translateY(var(--ty)); opacity: 0; }
+    }
+
+    .neshama-big {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      font-family: 'Heebo', sans-serif;
+      font-weight: 900;
+      font-size: clamp(80px, 15vw, 200px);
+      color: #33ff33;
+      z-index: 100000;
+      white-space: nowrap;
+      text-shadow: 0 0 30px rgba(51,255,51,0.9), 0 0 60px rgba(51,255,51,0.5), 0 0 120px rgba(51,255,51,0.3);
+      animation: neshamaBig 2.5s ease-out forwards;
+      pointer-events: none;
+    }
+    @keyframes neshamaBig {
+      0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+      20% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+      40% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+      70% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+      100% { transform: translate(-50%, -50%) scale(2); opacity: 0; }
+    }
+
+    .neshama-flash {
+      position: fixed;
+      inset: 0;
+      z-index: 99998;
+      background: #33ff33;
+      pointer-events: none;
+      animation: neshamaFlash 0.4s ease-out forwards;
+    }
+    @keyframes neshamaFlash {
+      0% { opacity: 0.6; }
+      100% { opacity: 0; }
+    }
+
     @media (max-width: 860px) {
       .cols { grid-template-columns: 1fr; }
       .results-area { grid-column: 1; }
@@ -1087,14 +1182,823 @@
 
     body.theme-hitech ::-webkit-scrollbar-thumb { background: rgba(99,179,237,0.2); border-radius: 3px; }
     body.theme-hitech ::-webkit-scrollbar-thumb:hover { background: rgba(99,179,237,0.4); }
+
+    /* ========================================
+       CYBERPUNK THEME
+       ======================================== */
+    body.theme-cyberpunk {
+      font-family: 'Heebo', sans-serif;
+      background: #0d0015;
+      color: #f0e6ff;
+    }
+    body.theme-cyberpunk::after {
+      background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,0,200,0.03) 2px, rgba(255,0,200,0.03) 4px);
+    }
+
+    body.theme-cyberpunk .brand-mark {
+      border: 2px solid #ff00c8;
+      background: rgba(255,0,200,0.1);
+      color: #ff00c8;
+      animation: cpBrandPulse 2s ease-in-out infinite;
+      box-shadow: 0 0 20px rgba(255,0,200,0.4), inset 0 0 15px rgba(255,0,200,0.1);
+    }
+    @keyframes cpBrandPulse {
+      0%,100% { box-shadow: 0 0 20px rgba(255,0,200,0.4), inset 0 0 15px rgba(255,0,200,0.1); }
+      50% { box-shadow: 0 0 35px rgba(255,0,200,0.6), 0 0 60px rgba(255,230,0,0.15), inset 0 0 20px rgba(255,0,200,0.2); }
+    }
+    body.theme-cyberpunk .brand-name {
+      font-family: 'Press Start 2P', monospace;
+      animation: none;
+      color: #ff00c8;
+      text-shadow: 0 0 15px rgba(255,0,200,0.6), 3px 0 0 rgba(0,255,255,0.3), -3px 0 0 rgba(255,230,0,0.3);
+    }
+    body.theme-cyberpunk .brand-name .sub-line {
+      animation: none;
+      color: #ffe600;
+      text-shadow: 0 0 10px rgba(255,230,0,0.5);
+    }
+    body.theme-cyberpunk .brand-tag { animation: none; color: rgba(255,0,200,0.3); }
+
+    body.theme-cyberpunk .sep-bar {
+      height: 2px;
+      background: linear-gradient(90deg, #ff00c8, #ffe600, #00ffff, #ff00c8);
+      animation: sepShift 1.5s linear infinite;
+      box-shadow: 0 0 15px rgba(255,0,200,0.5), 0 0 30px rgba(255,230,0,0.2);
+    }
+
+    body.theme-cyberpunk .tab {
+      font-family: 'Press Start 2P', monospace;
+      border: 1px solid rgba(255,0,200,0.3);
+      background: rgba(255,0,200,0.05);
+      color: #996;
+      clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
+      padding: 10px 24px;
+    }
+    body.theme-cyberpunk .tab:first-child { border-right: 1px solid rgba(255,0,200,0.3); }
+    body.theme-cyberpunk .tab:hover { color: #ffe600; border-color: #ffe600; text-shadow: 0 0 10px rgba(255,230,0,0.5); }
+    body.theme-cyberpunk .tab.active {
+      background: linear-gradient(135deg, rgba(255,0,200,0.2), rgba(255,230,0,0.1));
+      border-color: #ff00c8;
+      color: #ff00c8;
+      text-shadow: 0 0 12px rgba(255,0,200,0.6);
+      animation: none;
+      box-shadow: 0 0 20px rgba(255,0,200,0.2), inset 0 0 20px rgba(255,0,200,0.05);
+    }
+
+    body.theme-cyberpunk .card {
+      background: rgba(13,0,21,0.85);
+      border: 1px solid rgba(255,0,200,0.15);
+      clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
+      backdrop-filter: blur(10px);
+    }
+    body.theme-cyberpunk .card::before { display: none; }
+    body.theme-cyberpunk .card:hover { border-color: rgba(255,0,200,0.4); box-shadow: 0 0 30px rgba(255,0,200,0.08); }
+
+    body.theme-cyberpunk .card-head {
+      border-bottom: 1px solid rgba(255,0,200,0.15);
+      background: linear-gradient(90deg, rgba(255,0,200,0.06), transparent);
+    }
+    body.theme-cyberpunk .card-head-dot {
+      animation: none;
+      background: #ff00c8;
+      box-shadow: 0 0 8px #ff00c8;
+      clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+      width: 10px; height: 10px;
+    }
+    body.theme-cyberpunk .card-head span {
+      animation: none;
+      color: #ff00c8;
+      text-shadow: 0 0 8px rgba(255,0,200,0.4);
+      font-family: 'Press Start 2P', monospace;
+    }
+
+    body.theme-cyberpunk textarea {
+      background: rgba(255,0,200,0.03);
+      border: 1px solid rgba(255,0,200,0.2);
+      color: #00ffff;
+      animation: none;
+      text-shadow: 0 0 4px rgba(0,255,255,0.3);
+      font-family: 'Courier New', monospace;
+    }
+    body.theme-cyberpunk textarea:focus {
+      border-color: #ff00c8;
+      box-shadow: 0 0 20px rgba(255,0,200,0.15), inset 0 0 30px rgba(255,0,200,0.03);
+    }
+    body.theme-cyberpunk textarea::placeholder { color: rgba(255,0,200,0.2); }
+
+    body.theme-cyberpunk .pill {
+      border: 1px solid #ffe600;
+      color: #ffe600;
+      text-shadow: 0 0 6px rgba(255,230,0,0.4);
+      clip-path: polygon(6px 0, 100% 0, calc(100% - 6px) 100%, 0 100%);
+    }
+
+    body.theme-cyberpunk .field {
+      border: 1px solid rgba(255,0,200,0.1);
+      background: rgba(255,0,200,0.02);
+    }
+    body.theme-cyberpunk .field:hover { border-color: rgba(255,0,200,0.3); }
+    body.theme-cyberpunk .field-label { color: #996; font-family: 'Press Start 2P', monospace; }
+    body.theme-cyberpunk .field-val { color: #00ffff; text-shadow: 0 0 6px rgba(0,255,255,0.4); }
+    body.theme-cyberpunk input[type="range"] { background: rgba(255,0,200,0.15); }
+    body.theme-cyberpunk input[type="range"]::-webkit-slider-thumb {
+      background: #ff00c8;
+      border: 1px solid #ffe600;
+      box-shadow: 0 0 10px rgba(255,0,200,0.6), 0 0 20px rgba(255,230,0,0.2);
+    }
+
+    body.theme-cyberpunk select {
+      background: rgba(13,0,21,0.8);
+      border: 1px solid rgba(255,0,200,0.2);
+      color: #00ffff;
+      font-family: 'Press Start 2P', monospace;
+    }
+    body.theme-cyberpunk select:hover { border-color: #ff00c8; }
+
+    body.theme-cyberpunk .btn {
+      font-family: 'Press Start 2P', monospace;
+      clip-path: polygon(6px 0, 100% 0, calc(100% - 6px) 100%, 0 100%);
+    }
+    body.theme-cyberpunk .btn-main {
+      border-color: #ff00c8;
+      color: #ff00c8;
+      text-shadow: 0 0 8px rgba(255,0,200,0.5);
+      animation: cpBtnPulse 2s ease-in-out infinite;
+    }
+    @keyframes cpBtnPulse {
+      0%,100% { box-shadow: 0 0 5px rgba(255,0,200,0.3); }
+      50% { box-shadow: 0 0 20px rgba(255,0,200,0.5), 0 0 40px rgba(255,0,200,0.15); }
+    }
+    body.theme-cyberpunk .btn-main:hover:not(:disabled) {
+      background: linear-gradient(135deg, #ff00c8, #ffe600);
+      color: #0d0015;
+      text-shadow: none;
+      box-shadow: 0 0 30px rgba(255,0,200,0.5), 0 0 60px rgba(255,230,0,0.2);
+      animation: none;
+    }
+    body.theme-cyberpunk .btn-alt {
+      border-color: #00ffff;
+      color: #00ffff;
+      text-shadow: 0 0 8px rgba(0,255,255,0.4);
+      animation: none;
+    }
+    body.theme-cyberpunk .btn-alt:hover:not(:disabled) {
+      background: linear-gradient(135deg, #00ffff, #00ff88);
+      color: #0d0015;
+      text-shadow: none;
+      box-shadow: 0 0 30px rgba(0,255,255,0.4);
+    }
+
+    body.theme-cyberpunk .preview-wrap { border: 1px solid rgba(255,0,200,0.2); }
+    body.theme-cyberpunk .preview-placeholder span { color: rgba(255,0,200,0.2); font-family: 'Press Start 2P', monospace; }
+    body.theme-cyberpunk .nav-btn { border: 1px solid rgba(255,0,200,0.2); color: #ff00c8; }
+    body.theme-cyberpunk .nav-btn:hover { border-color: #ff00c8; box-shadow: 0 0 10px rgba(255,0,200,0.3); }
+    body.theme-cyberpunk .nav-counter { color: #ffe600; text-shadow: 0 0 6px rgba(255,230,0,0.3); }
+
+    body.theme-cyberpunk .safe-margins .action-safe { border-color: rgba(255,0,200,0.5); }
+    body.theme-cyberpunk .safe-margins .title-safe { border-color: rgba(0,255,255,0.5); }
+    body.theme-cyberpunk .safe-margins .label-action { color: #ff00c8; }
+    body.theme-cyberpunk .safe-margins .label-title { color: #00ffff; }
+
+    body.theme-cyberpunk .status-msg.ok { color: #00ffff; text-shadow: 0 0 10px rgba(0,255,255,0.5); }
+    body.theme-cyberpunk .status-msg.busy { color: #ffe600; text-shadow: 0 0 10px rgba(255,230,0,0.5); }
+    body.theme-cyberpunk .spin { border-top-color: #ff00c8; }
+
+    body.theme-cyberpunk .tile { border: 1px solid rgba(255,0,200,0.1); }
+    body.theme-cyberpunk .tile:hover { border-color: #ff00c8; box-shadow: 0 0 20px rgba(255,0,200,0.15); }
+    body.theme-cyberpunk .tile-text { color: #996; border-color: rgba(255,0,200,0.1); }
+
+    body.theme-cyberpunk .upload-zone {
+      border: 2px dashed rgba(255,0,200,0.2);
+      background: rgba(255,0,200,0.02);
+    }
+    body.theme-cyberpunk .upload-zone:hover,
+    body.theme-cyberpunk .upload-zone.dragover {
+      border-color: #ff00c8;
+      box-shadow: inset 0 0 40px rgba(255,0,200,0.05);
+    }
+    body.theme-cyberpunk .upload-zone h3 { color: #ffe600; text-shadow: 0 0 8px rgba(255,230,0,0.4); }
+    body.theme-cyberpunk .upload-zone p { color: rgba(255,0,200,0.3); }
+
+    body.theme-cyberpunk .file-info { border-color: #00ffff; box-shadow: 0 0 10px rgba(0,255,255,0.1); }
+    body.theme-cyberpunk .file-name { color: #00ffff; }
+
+    body.theme-cyberpunk .segment-list { border: 1px solid rgba(255,0,200,0.15); background: rgba(13,0,21,0.6); }
+    body.theme-cyberpunk .segment:hover { background: rgba(255,0,200,0.04); }
+    body.theme-cyberpunk .seg-time { color: #ff00c8; text-shadow: 0 0 6px rgba(255,0,200,0.4); }
+    body.theme-cyberpunk .seg-text { color: #f0e6ff; }
+
+    body.theme-cyberpunk .step { border: 1px solid rgba(255,0,200,0.2); color: #663; }
+    body.theme-cyberpunk .step.active { border-color: #ffe600; color: #ffe600; text-shadow: 0 0 8px rgba(255,230,0,0.5); }
+    body.theme-cyberpunk .step.done { border-color: #00ffff; color: #00ffff; }
+    body.theme-cyberpunk .step-arrow { color: rgba(255,0,200,0.3); }
+
+    body.theme-cyberpunk .model-status { border: 1px solid rgba(255,0,200,0.1); }
+    body.theme-cyberpunk .model-status.loading { color: #ffe600; border-color: rgba(255,230,0,0.2); }
+    body.theme-cyberpunk .model-status.ready { color: #00ffff; border-color: rgba(0,255,255,0.2); }
+    body.theme-cyberpunk .model-status.error { color: #ff0044; border-color: rgba(255,0,68,0.2); }
+    body.theme-cyberpunk .model-progress-bar { background: linear-gradient(90deg, #ff00c8, #ffe600); }
+
+    body.theme-cyberpunk .btn-cleanup { border-color: #ffe600; color: #ffe600; }
+    body.theme-cyberpunk .btn-cleanup:hover { background: rgba(255,230,0,0.08); box-shadow: 0 0 15px rgba(255,230,0,0.2); }
+    body.theme-cyberpunk .file-drop-small { color: #663; }
+    body.theme-cyberpunk .file-drop-small:hover { border-color: #ffe600; color: #ffe600; }
+
+    body.theme-cyberpunk .opt-toggle input:checked ~ .ot-box { border-color: #ff00c8; color: #ff00c8; }
+    body.theme-cyberpunk .opt-toggle input:checked ~ .ot-label { color: #ff00c8; text-shadow: 0 0 6px rgba(255,0,200,0.3); }
+    body.theme-cyberpunk .safe-toggle input:checked ~ .check-box { border-color: #00ffff; color: #00ffff; }
+    body.theme-cyberpunk .safe-toggle input:checked ~ .check-label { color: #00ffff; }
+
+    body.theme-cyberpunk .scroller { background: #0d0015; border-top: 1px solid rgba(255,0,200,0.2); }
+    body.theme-cyberpunk .s1 { color: #ff00c8; text-shadow: 0 0 12px rgba(255,0,200,0.7); }
+    body.theme-cyberpunk .s2 { color: #00ffff; text-shadow: 0 0 12px rgba(0,255,255,0.7); }
+    body.theme-cyberpunk .s3 { color: #ffe600; text-shadow: 0 0 12px rgba(255,230,0,0.7); }
+    body.theme-cyberpunk .s4 { color: #ff0066; text-shadow: 0 0 12px rgba(255,0,102,0.7); }
+    body.theme-cyberpunk .s5 { color: #00ff88; text-shadow: 0 0 12px rgba(0,255,136,0.7); }
+
+    body.theme-cyberpunk .theme-btn {
+      border: 2px solid rgba(255,0,200,0.3);
+      background: rgba(13,0,21,0.9);
+      color: rgba(255,0,200,0.5);
+      box-shadow: 0 0 10px rgba(255,0,200,0.1);
+    }
+    body.theme-cyberpunk .theme-btn:hover { border-color: #ffe600; color: #ffe600; box-shadow: 0 0 15px rgba(255,230,0,0.3); }
+    body.theme-cyberpunk .theme-btn.active { border-color: #ff00c8; color: #ff00c8; box-shadow: 0 0 15px rgba(255,0,200,0.4); }
+    body.theme-cyberpunk .color-hex { color: #996; }
+
+    body.theme-cyberpunk ::-webkit-scrollbar-thumb { background: rgba(255,0,200,0.2); }
+    body.theme-cyberpunk ::-webkit-scrollbar-thumb:hover { background: rgba(255,0,200,0.4); }
+
+    /* ========================================
+       TERMINAL THEME
+       ======================================== */
+    body.theme-terminal {
+      font-family: 'Courier New', monospace;
+      background: #0a0a0a;
+      color: #33ff33;
+    }
+    body.theme-terminal::after {
+      background: repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(0,255,0,0.015) 1px, rgba(0,255,0,0.015) 2px);
+    }
+
+    body.theme-terminal .brand-mark {
+      border: 1px solid #33ff33;
+      background: transparent;
+      color: #33ff33;
+      animation: none;
+      box-shadow: 0 0 10px rgba(51,255,51,0.2);
+      font-family: 'Courier New', monospace;
+    }
+    body.theme-terminal .brand-name {
+      font-family: 'Courier New', monospace;
+      animation: none;
+      color: #33ff33;
+      text-shadow: 0 0 8px rgba(51,255,51,0.5);
+      font-size: 0.7rem;
+    }
+    body.theme-terminal .brand-name .sub-line {
+      animation: none;
+      color: #22aa22;
+      text-shadow: 0 0 6px rgba(51,255,51,0.3);
+    }
+    body.theme-terminal .brand-tag {
+      animation: none;
+      color: #115511;
+      font-family: 'Courier New', monospace;
+    }
+
+    body.theme-terminal .sep-bar {
+      height: 1px;
+      background: #33ff33;
+      animation: none;
+      box-shadow: 0 0 8px rgba(51,255,51,0.3);
+      opacity: 0.4;
+    }
+
+    body.theme-terminal .tab {
+      font-family: 'Courier New', monospace;
+      font-size: 0.65rem;
+      border: 1px solid #1a5a1a;
+      background: transparent;
+      color: #1a5a1a;
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+    body.theme-terminal .tab:first-child { border-right: 1px solid #1a5a1a; }
+    body.theme-terminal .tab:hover { color: #33ff33; border-color: #33ff33; text-shadow: 0 0 6px rgba(51,255,51,0.4); }
+    body.theme-terminal .tab.active {
+      background: rgba(51,255,51,0.05);
+      border-color: #33ff33;
+      color: #33ff33;
+      text-shadow: 0 0 8px rgba(51,255,51,0.5);
+      animation: termBlink 1.5s step-end infinite;
+      box-shadow: 0 0 10px rgba(51,255,51,0.1);
+    }
+    @keyframes termBlink { 50% { border-color: #1a5a1a; } }
+
+    body.theme-terminal .card {
+      background: rgba(0,15,0,0.6);
+      border: 1px solid #1a5a1a;
+      backdrop-filter: none;
+    }
+    body.theme-terminal .card::before { display: none; }
+    body.theme-terminal .card:hover { border-color: #33ff33; }
+
+    body.theme-terminal .card-head {
+      border-bottom: 1px solid #1a5a1a;
+      background: rgba(51,255,51,0.02);
+    }
+    body.theme-terminal .card-head-dot {
+      animation: termDotBlink 1s step-end infinite;
+      background: #33ff33;
+      box-shadow: 0 0 6px #33ff33;
+      width: 8px; height: 8px;
+    }
+    @keyframes termDotBlink { 50% { opacity: 0.2; } }
+    body.theme-terminal .card-head span {
+      animation: none;
+      color: #33ff33;
+      text-shadow: 0 0 6px rgba(51,255,51,0.3);
+      font-family: 'Courier New', monospace;
+      font-size: 0.55rem;
+      letter-spacing: 1px;
+    }
+    body.theme-terminal .card-head span::before { content: "> "; color: #22aa22; }
+
+    body.theme-terminal textarea {
+      background: rgba(0,10,0,0.8);
+      border: 1px solid #1a5a1a;
+      color: #33ff33;
+      font-family: 'Courier New', monospace;
+      animation: none;
+      text-shadow: 0 0 3px rgba(51,255,51,0.3);
+      caret-color: #33ff33;
+    }
+    body.theme-terminal textarea:focus {
+      border-color: #33ff33;
+      box-shadow: 0 0 15px rgba(51,255,51,0.1), inset 0 0 30px rgba(51,255,51,0.02);
+    }
+    body.theme-terminal textarea::placeholder { color: #115511; }
+
+    body.theme-terminal .pill {
+      border: 1px solid #22aa22;
+      color: #22aa22;
+      text-shadow: none;
+      font-family: 'Courier New', monospace;
+    }
+    body.theme-terminal .pill::before { content: "["; }
+    body.theme-terminal .pill::after { content: "]"; }
+
+    body.theme-terminal .field {
+      border: 1px solid #1a3a1a;
+      background: rgba(0,10,0,0.3);
+    }
+    body.theme-terminal .field:hover { border-color: #33ff33; }
+    body.theme-terminal .field-label {
+      color: #1a7a1a;
+      font-family: 'Courier New', monospace;
+      font-size: 0.5rem;
+    }
+    body.theme-terminal .field-val {
+      color: #33ff33;
+      text-shadow: 0 0 4px rgba(51,255,51,0.3);
+      font-family: 'Courier New', monospace;
+    }
+    body.theme-terminal input[type="range"] { background: #0a2a0a; }
+    body.theme-terminal input[type="range"]::-webkit-slider-thumb {
+      background: #33ff33;
+      border: 1px solid #0a0a0a;
+      box-shadow: 0 0 8px rgba(51,255,51,0.5);
+    }
+
+    body.theme-terminal select {
+      background: rgba(0,10,0,0.8);
+      border: 1px solid #1a5a1a;
+      color: #33ff33;
+      font-family: 'Courier New', monospace;
+      font-size: 0.55rem;
+    }
+    body.theme-terminal select:hover { border-color: #33ff33; }
+    body.theme-terminal select:focus { border-color: #33ff33; box-shadow: 0 0 8px rgba(51,255,51,0.15); }
+
+    body.theme-terminal .btn {
+      font-family: 'Courier New', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 1px;
+    }
+    body.theme-terminal .btn-main {
+      border-color: #33ff33;
+      color: #33ff33;
+      text-shadow: 0 0 6px rgba(51,255,51,0.4);
+      animation: none;
+    }
+    body.theme-terminal .btn-main:hover:not(:disabled) {
+      background: #33ff33;
+      color: #0a0a0a;
+      text-shadow: none;
+      box-shadow: 0 0 25px rgba(51,255,51,0.4);
+    }
+    body.theme-terminal .btn-alt {
+      border-color: #22aa22;
+      color: #22aa22;
+      text-shadow: none;
+      animation: none;
+    }
+    body.theme-terminal .btn-alt:hover:not(:disabled) {
+      background: #22aa22;
+      color: #0a0a0a;
+      text-shadow: none;
+      box-shadow: 0 0 25px rgba(34,170,34,0.4);
+    }
+
+    body.theme-terminal .preview-wrap { border: 1px solid #1a5a1a; }
+    body.theme-terminal .preview-placeholder span { color: #115511; font-family: 'Courier New', monospace; font-size: 0.55rem; }
+    body.theme-terminal .nav-btn {
+      border: 1px solid #1a5a1a;
+      color: #33ff33;
+      font-family: 'Courier New', monospace;
+    }
+    body.theme-terminal .nav-btn:hover { border-color: #33ff33; box-shadow: 0 0 8px rgba(51,255,51,0.2); }
+    body.theme-terminal .nav-counter {
+      color: #22aa22;
+      text-shadow: 0 0 4px rgba(51,255,51,0.3);
+      font-family: 'Courier New', monospace;
+    }
+
+    body.theme-terminal .status-msg { font-family: 'Courier New', monospace; }
+    body.theme-terminal .status-msg.ok { color: #33ff33; text-shadow: 0 0 8px rgba(51,255,51,0.5); }
+    body.theme-terminal .status-msg.ok::before { content: "[OK] "; }
+    body.theme-terminal .status-msg.busy { color: #22aa22; text-shadow: 0 0 8px rgba(34,170,34,0.5); }
+    body.theme-terminal .spin { border-top-color: #33ff33; }
+
+    body.theme-terminal .tile { border: 1px solid #1a3a1a; }
+    body.theme-terminal .tile:hover { border-color: #33ff33; box-shadow: 0 0 10px rgba(51,255,51,0.1); }
+    body.theme-terminal .tile-text { color: #1a7a1a; border-color: #1a3a1a; font-family: 'Courier New', monospace; font-size: 0.6rem; }
+
+    body.theme-terminal .upload-zone {
+      border: 1px dashed #1a5a1a;
+      background: rgba(0,10,0,0.3);
+    }
+    body.theme-terminal .upload-zone:hover,
+    body.theme-terminal .upload-zone.dragover {
+      border-color: #33ff33;
+      box-shadow: inset 0 0 30px rgba(51,255,51,0.03);
+    }
+    body.theme-terminal .upload-zone h3 {
+      font-family: 'Courier New', monospace;
+      color: #33ff33;
+      text-shadow: 0 0 6px rgba(51,255,51,0.4);
+      font-size: 0.65rem;
+    }
+    body.theme-terminal .upload-zone p { font-family: 'Courier New', monospace; color: #1a5a1a; font-size: 0.5rem; }
+
+    body.theme-terminal .file-info { border-color: #33ff33; box-shadow: 0 0 8px rgba(51,255,51,0.1); }
+    body.theme-terminal .file-name { color: #33ff33; font-family: 'Courier New', monospace; }
+    body.theme-terminal .file-size { font-family: 'Courier New', monospace; }
+
+    body.theme-terminal .segment-list { border: 1px solid #1a5a1a; background: rgba(0,10,0,0.5); }
+    body.theme-terminal .segment { border-color: #0a2a0a; }
+    body.theme-terminal .segment:hover { background: rgba(51,255,51,0.03); }
+    body.theme-terminal .seg-time {
+      color: #22aa22;
+      text-shadow: 0 0 4px rgba(51,255,51,0.3);
+      font-family: 'Courier New', monospace;
+    }
+    body.theme-terminal .seg-text { color: #33ff33; font-family: 'Courier New', monospace; }
+
+    body.theme-terminal .step {
+      font-family: 'Courier New', monospace;
+      border: 1px solid #1a3a1a;
+      color: #1a5a1a;
+    }
+    body.theme-terminal .step.active { border-color: #33ff33; color: #33ff33; text-shadow: 0 0 6px rgba(51,255,51,0.4); }
+    body.theme-terminal .step.done { border-color: #22aa22; color: #22aa22; }
+    body.theme-terminal .step.done::before { content: "✓ "; }
+    body.theme-terminal .step-arrow { color: #1a3a1a; font-family: 'Courier New', monospace; }
+
+    body.theme-terminal .model-status {
+      font-family: 'Courier New', monospace;
+      border: 1px solid #1a3a1a;
+    }
+    body.theme-terminal .model-status.loading { color: #22aa22; border-color: #1a5a1a; }
+    body.theme-terminal .model-status.ready { color: #33ff33; border-color: #33ff33; }
+    body.theme-terminal .model-status.error { color: #ff3333; border-color: #5a1a1a; }
+    body.theme-terminal .model-progress { background: #0a2a0a; }
+    body.theme-terminal .model-progress-bar { background: #33ff33; }
+
+    body.theme-terminal .btn-cleanup {
+      border: 1px solid #22aa22;
+      color: #22aa22;
+      font-family: 'Courier New', monospace;
+    }
+    body.theme-terminal .btn-cleanup:hover { background: rgba(51,255,51,0.05); box-shadow: 0 0 10px rgba(51,255,51,0.15); }
+    body.theme-terminal .file-drop-small { font-family: 'Courier New', monospace; color: #1a5a1a; }
+    body.theme-terminal .file-drop-small:hover { border-color: #33ff33; color: #33ff33; }
+
+    body.theme-terminal .opt-toggle .ot-label { font-family: 'Courier New', monospace; }
+    body.theme-terminal .opt-toggle input:checked ~ .ot-box { border-color: #33ff33; color: #33ff33; box-shadow: 0 0 6px rgba(51,255,51,0.3); }
+    body.theme-terminal .opt-toggle input:checked ~ .ot-label { color: #33ff33; text-shadow: 0 0 4px rgba(51,255,51,0.3); }
+    body.theme-terminal .safe-toggle .check-label { font-family: 'Courier New', monospace; }
+    body.theme-terminal .safe-toggle input:checked ~ .check-box { border-color: #33ff33; color: #33ff33; }
+    body.theme-terminal .safe-toggle input:checked ~ .check-label { color: #33ff33; }
+
+    body.theme-terminal .scroller { background: #0a0a0a; border-top: 1px solid #1a3a1a; }
+    body.theme-terminal .scroller-track { font-family: 'Courier New', monospace; font-size: 0.55rem; }
+    body.theme-terminal .s1, body.theme-terminal .s2, body.theme-terminal .s3,
+    body.theme-terminal .s4, body.theme-terminal .s5 {
+      color: #33ff33;
+      text-shadow: 0 0 8px rgba(51,255,51,0.5);
+    }
+
+    body.theme-terminal .theme-btn {
+      border: 1px solid #1a5a1a;
+      background: rgba(0,10,0,0.8);
+      color: #1a7a1a;
+      box-shadow: none;
+    }
+    body.theme-terminal .theme-btn:hover { border-color: #33ff33; color: #33ff33; box-shadow: 0 0 8px rgba(51,255,51,0.2); transform: none; }
+    body.theme-terminal .theme-btn.active { border-color: #33ff33; color: #33ff33; box-shadow: 0 0 10px rgba(51,255,51,0.3); }
+
+    body.theme-terminal .color-hex { font-family: 'Courier New', monospace; color: #1a7a1a; }
+
+    body.theme-terminal ::-webkit-scrollbar-thumb { background: #1a5a1a; }
+    body.theme-terminal ::-webkit-scrollbar-thumb:hover { background: #33ff33; }
+
+    /* ===== TERMINAL CHAT MODE ===== */
+    body.theme-terminal .settings,
+    body.theme-terminal .actions,
+    body.theme-terminal .btn-cleanup,
+    body.theme-terminal .file-drop-small,
+    body.theme-terminal .pill,
+    body.theme-terminal .results-area,
+    body.theme-terminal .safe-toggle,
+    body.theme-terminal .nav-strip,
+    body.theme-terminal .safe-margins,
+    body.theme-terminal .preview-placeholder,
+    body.theme-terminal .tabs { display: none !important; }
+
+    body.theme-terminal .cols { grid-template-columns: 1fr 1fr; }
+
+    body.theme-terminal .preview-wrap {
+      aspect-ratio: unset;
+      min-height: 420px;
+      max-height: 70vh;
+      overflow: hidden;
+      position: relative;
+    }
+    body.theme-terminal .preview-wrap canvas { display: none; }
+
+    body.theme-terminal #terminalChat {
+      display: flex;
+      flex-direction: column;
+      position: absolute;
+      inset: 0;
+      padding: 14px;
+      overflow-y: auto;
+      font-family: 'Courier New', monospace;
+      font-size: 0.8rem;
+      line-height: 1.7;
+      color: #33ff33;
+      background: rgba(0,5,0,0.9);
+    }
+    #terminalChat { display: none; }
+
+    .term-line {
+      margin-bottom: 4px;
+      word-break: break-word;
+      direction: rtl;
+    }
+    .term-line .term-prompt {
+      color: #22aa22;
+      direction: ltr;
+      display: inline;
+    }
+    .term-line.term-user { color: #88ff88; }
+    .term-line.term-user .term-prompt { color: #33ff33; }
+    .term-line.term-ai { color: #33ff33; }
+    .term-line.term-ai .term-prompt { color: #00cc44; }
+    .term-line.term-system {
+      color: #1a7a1a;
+      font-size: 0.7rem;
+      border-bottom: 1px solid #0a3a0a;
+      padding-bottom: 6px;
+      margin-bottom: 8px;
+    }
+    .term-cursor {
+      display: inline-block;
+      width: 8px;
+      height: 14px;
+      background: #33ff33;
+      animation: termCursorBlink 0.6s step-end infinite;
+      vertical-align: text-bottom;
+      margin-right: 2px;
+    }
+    @keyframes termCursorBlink { 50% { opacity: 0; } }
+
+    .term-typing .term-text {
+      overflow: hidden;
+      border-left: none;
+    }
+
+    body.theme-terminal textarea {
+      height: 160px;
+      font-size: 0.85rem;
+      line-height: 1.8;
+    }
+    body.theme-terminal .card-inner > *:not(textarea):not(#terminalChat) {
+      /* keep textarea visible but hide other controls in input card */
+    }
+
+    /* ===== FIGHT GAME (SAVTA REVENGE) ===== */
+    #fightOverlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      background: #000;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    #fightOverlay.active { display: flex; }
+    #fightCanvas {
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+      border: 3px solid #444;
+      max-width: 100vw;
+      max-height: 100vh;
+    }
+    .fight-intro {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,0.95);
+      z-index: 2;
+      color: #33ff33;
+      font-family: 'Press Start 2P', monospace;
+      text-align: center;
+      animation: fightIntroFade 0.5s ease-out;
+    }
+    @keyframes fightIntroFade { from { opacity:0; } to { opacity:1; } }
+    .fight-intro h1 {
+      font-size: 2.5rem;
+      color: #FFD700;
+      text-shadow: 0 0 20px #ff8800, 0 0 40px #ff4400, 0 0 80px #ff0000;
+      margin-bottom: 20px;
+      letter-spacing: 8px;
+      animation: fightPulse 0.5s ease-in-out infinite alternate;
+    }
+    @keyframes fightPulse { from { transform: scale(1); } to { transform: scale(1.05); } }
+    .fight-intro .vs-names {
+      font-size: 1rem;
+      margin: 20px 0;
+      line-height: 2;
+    }
+    .fight-intro .vs-names .savta-name { color: #75b8ff; }
+    .fight-intro .vs-names .robot-name { color: #ff6666; }
+    .fight-intro .press-start {
+      font-size: 0.7rem;
+      color: #ffff33;
+      margin-top: 30px;
+      animation: blinkText 1s step-end infinite;
+    }
+    @keyframes blinkText { 50% { opacity: 0; } }
+    .fight-result {
+      position: absolute;
+      inset: 0;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,0.85);
+      z-index: 3;
+      font-family: 'Press Start 2P', monospace;
+      text-align: center;
+    }
+    .fight-result.active { display: flex; }
+
+    /* ===== FIGHT TRANSITION ===== */
+    #fightTransition {
+      position: fixed; inset: 0; z-index: 99998;
+      display: none; align-items: center; justify-content: center;
+      background: #000;
+      pointer-events: none;
+    }
+    #fightTransition.active { display: flex; }
+    #fightTransition .trans-text {
+      font-family: 'Press Start 2P', monospace;
+      color: #FFD700;
+      font-size: 1.8rem;
+      text-shadow: 0 0 20px #ff8800, 0 0 40px #ff4400;
+      opacity: 0;
+      animation: transTextIn 0.6s ease-out forwards;
+      letter-spacing: 6px;
+    }
+    @keyframes transTextIn {
+      0% { opacity:0; transform: scale(3) rotate(-10deg); }
+      60% { opacity:1; transform: scale(1.1) rotate(2deg); }
+      100% { opacity:1; transform: scale(1) rotate(0deg); }
+    }
+    #fightTransition .trans-bars {
+      position: absolute; inset: 0;
+    }
+    #fightTransition .trans-bar {
+      position: absolute; left: 0; right: 0; background: #FFD700; height: 0;
+    }
+    #fightTransition .trans-bar:nth-child(1) { top: 0; animation: barSlide 0.4s 0.0s ease-in forwards; }
+    #fightTransition .trans-bar:nth-child(2) { top: 25%; animation: barSlide 0.4s 0.05s ease-in forwards; }
+    #fightTransition .trans-bar:nth-child(3) { top: 50%; animation: barSlide 0.4s 0.1s ease-in forwards; }
+    #fightTransition .trans-bar:nth-child(4) { top: 75%; animation: barSlide 0.4s 0.15s ease-in forwards; }
+    @keyframes barSlide {
+      0% { height: 0; opacity: 1; }
+      50% { height: 25%; opacity: 1; }
+      100% { height: 25%; opacity: 0; background: #000; }
+    }
+
+    /* ===== FIGHT TUTORIAL OVERLAY ===== */
+    #fightTutorial {
+      position: absolute; inset: 0; z-index: 4;
+      display: none; flex-direction: column;
+      align-items: center; justify-content: center;
+      background: rgba(0,0,0,0.75);
+      backdrop-filter: blur(3px);
+      font-family: 'Press Start 2P', monospace;
+      text-align: center; color: #ddd;
+      animation: tutFade 0.5s ease-out;
+    }
+    @keyframes tutFade { from { opacity:0; } to { opacity:1; } }
+    #fightTutorial.active { display: flex; }
+    #fightTutorial h2 {
+      color: #FFD700; font-size: 1.2rem; margin-bottom: 24px;
+      text-shadow: 0 0 10px #ff8800;
+    }
+    #fightTutorial .tut-grid {
+      display: grid; grid-template-columns: auto auto;
+      gap: 8px 20px; font-size: 0.5rem; line-height: 2.4;
+    }
+    #fightTutorial .tut-key {
+      color: #FFD700; text-align: right;
+      background: rgba(255,215,0,0.1);
+      padding: 2px 8px; border-radius: 4px;
+      border: 1px solid rgba(255,215,0,0.3);
+    }
+    #fightTutorial .tut-action { color: #aaa; text-align: left; padding: 2px 8px; }
+    #fightTutorial .tut-skip {
+      margin-top: 24px; font-size: 0.45rem; color: #888;
+      animation: blinkText 1s step-end infinite;
+    }
+    .fight-result h1 {
+      font-size: 1.8rem;
+      margin-bottom: 20px;
+      text-shadow: 0 0 20px currentColor;
+    }
+    .fight-result .press-start {
+      font-size: 0.65rem;
+      color: #ffff33;
+      margin-top: 20px;
+      animation: blinkText 1s step-end infinite;
+    }
   </style>
 </head>
 <body>
 
   <!-- Side Controls -->
   <div class="side-controls">
-    <button class="theme-btn active" id="themeKeygen" title="Keygen / Cracktro" onclick="setTheme('keygen')">&#x1F4BE;</button>
-    <button class="theme-btn" id="themeHitech" title="Hi-Tech Clean" onclick="setTheme('hitech')">&#x25C6;</button>
+    <button class="theme-btn active" id="themeHitech" title="Hi-Tech" onclick="setTheme('hitech')">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <rect x="2" y="3" width="20" height="14" rx="2"/>
+        <line x1="8" y1="21" x2="16" y2="21"/>
+        <line x1="12" y1="17" x2="12" y2="21"/>
+        <circle cx="12" cy="10" r="3" fill="currentColor" opacity="0.4"/>
+      </svg>
+    </button>
+    <button class="theme-btn" id="themeAlien" title="Alien" onclick="setTheme('alien')">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <ellipse cx="12" cy="10" rx="9" ry="10"/>
+        <ellipse cx="8" cy="9" rx="2.5" ry="1.5" fill="currentColor"/>
+        <ellipse cx="16" cy="9" rx="2.5" ry="1.5" fill="currentColor"/>
+        <path d="M10 15 Q12 17 14 15" stroke-linecap="round"/>
+      </svg>
+    </button>
+    <button class="theme-btn" id="themeCyberpunk" title="Cyberpunk" onclick="setTheme('cyberpunk')">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <polygon points="12,2 22,8.5 22,15.5 12,22 2,15.5 2,8.5"/>
+        <line x1="12" y1="2" x2="12" y2="22"/>
+        <line x1="2" y1="8.5" x2="22" y2="8.5"/>
+        <line x1="2" y1="15.5" x2="22" y2="15.5"/>
+        <circle cx="12" cy="12" r="3" fill="currentColor" opacity="0.5"/>
+      </svg>
+    </button>
+    <button class="theme-btn theme-btn-locked" id="themeTerminal" title="Terminal" onclick="setTheme('terminal')">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <rect x="2" y="3" width="20" height="18" rx="2"/>
+        <polyline points="6,9 10,12 6,15"/>
+        <line x1="12" y1="15" x2="18" y2="15"/>
+      </svg>
+    </button>
   </div>
 
   <!-- Starfield -->
@@ -1186,6 +2090,7 @@
           <div class="card-inner">
             <div class="preview-wrap">
               <canvas id="previewCanvas" width="1920" height="1080"></canvas>
+              <div id="terminalChat"></div>
               <div class="preview-placeholder" id="previewEmpty">
                 <span>[ TYPE TEXT TO PREVIEW ]</span>
               </div>
@@ -1413,18 +2318,26 @@
 
     // ===== THEME =====
     function setTheme(name) {
-      document.body.classList.remove('theme-hitech');
-      if (name === 'hitech') document.body.classList.add('theme-hitech');
+      document.body.classList.remove('theme-hitech', 'theme-cyberpunk', 'theme-terminal');
+      if (name !== 'alien') document.body.classList.add('theme-' + name);
       document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
       document.getElementById('theme' + name.charAt(0).toUpperCase() + name.slice(1)).classList.add('active');
       const sf = document.getElementById('starfield');
       const pl = document.getElementById('plasma');
-      if (name === 'keygen') { sf.style.display = ''; sf.style.opacity = ''; pl.style.display = ''; }
-      else if (name === 'hitech') { sf.style.display = ''; sf.style.opacity = '0.08'; pl.style.display = 'none'; }
+      if (name === 'alien')     { sf.style.display = ''; sf.style.opacity = ''; pl.style.display = ''; }
+      else if (name === 'hitech')    { sf.style.display = ''; sf.style.opacity = '0.08'; pl.style.display = 'none'; }
+      else if (name === 'cyberpunk') { sf.style.display = ''; sf.style.opacity = '0.15'; pl.style.display = ''; }
+      else if (name === 'terminal')  { sf.style.display = 'none'; pl.style.display = 'none'; }
       try { localStorage.setItem('submaker-theme', name); } catch(e) {}
     }
     window.setTheme = setTheme;
-    try { const saved = localStorage.getItem('submaker-theme'); if (saved && saved !== 'keygen') setTheme(saved); } catch(e) {}
+    // Default to hitech; load saved preference
+    try {
+      const saved = localStorage.getItem('submaker-theme');
+      if (saved && saved !== 'terminal') setTheme(saved);
+      else if (saved === 'terminal' && localStorage.getItem('submaker-terminal-unlocked')) setTheme('terminal');
+      else setTheme('hitech');
+    } catch(e) { setTheme('hitech'); }
 
     if (location.hash === '#auto') {
       document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -1601,11 +2514,448 @@
     }
     window.downloadAll = downloadAll;
 
-    input.addEventListener("input", () => { sync(); tick(); });
+    input.addEventListener("input", () => { sync(); tick(); checkEasterEgg(); });
     document.getElementById("fontSize").addEventListener("input", e => { document.getElementById("fontSizeVal").textContent = e.target.value; tick(); });
     document.getElementById("bottomMargin").addEventListener("input", e => { document.getElementById("marginVal").textContent = e.target.value; tick(); });
     document.getElementById("textColor").addEventListener("input", e => { document.getElementById("colorHex").textContent = e.target.value.toUpperCase(); tick(); });
     sync();
+
+    // ===== EASTER EGG: עומר זייטמן נשמה =====
+    const EASTER_EGG_PHRASE = 'עומר זייטמן נשמה';
+    let easterEggTriggered = false;
+
+    // Check if already unlocked from a previous visit
+    try {
+      if (localStorage.getItem('submaker-terminal-unlocked') === 'true') {
+        document.getElementById('themeTerminal').classList.add('unlocked');
+      }
+    } catch(e) {}
+
+    function checkEasterEgg() {
+      if (easterEggTriggered) return;
+      const text = input.value.trim();
+      // Check if the text contains the trigger phrase
+      if (text.includes(EASTER_EGG_PHRASE)) {
+        easterEggTriggered = true;
+        triggerNeshamaExplosion();
+      }
+    }
+
+    function triggerNeshamaExplosion() {
+      const word = 'נשמה';
+
+      // 1. Green flash
+      const flash = document.createElement('div');
+      flash.className = 'neshama-flash';
+      document.body.appendChild(flash);
+      setTimeout(() => flash.remove(), 500);
+
+      // 2. Overlay with many flying words
+      const overlay = document.createElement('div');
+      overlay.className = 'neshama-overlay';
+      document.body.appendChild(overlay);
+
+      const count = 80;
+      for (let i = 0; i < count; i++) {
+        const el = document.createElement('div');
+        el.className = 'neshama-word';
+        el.textContent = word;
+        const size = 14 + Math.random() * 60;
+        const x = Math.random() * 100;
+        const y = Math.random() * 100;
+        const dur = 1.5 + Math.random() * 2.5;
+        const delay = Math.random() * 1.8;
+        const rot = -180 + Math.random() * 360;
+        const sc = 0.5 + Math.random() * 2;
+        const ty = -100 - Math.random() * 300;
+        el.style.cssText = `
+          font-size: ${size}px;
+          left: ${x}%;
+          top: ${y}%;
+          --dur: ${dur}s;
+          --rot: ${rot}deg;
+          --sc: ${sc};
+          --ty: ${ty}px;
+          animation-delay: ${delay}s;
+        `;
+        overlay.appendChild(el);
+      }
+
+      // 3. Big center word after a beat
+      setTimeout(() => {
+        const big = document.createElement('div');
+        big.className = 'neshama-big';
+        big.textContent = word;
+        document.body.appendChild(big);
+        setTimeout(() => big.remove(), 3000);
+      }, 600);
+
+      // 4. Second wave of words
+      setTimeout(() => {
+        for (let i = 0; i < 40; i++) {
+          const el = document.createElement('div');
+          el.className = 'neshama-word';
+          el.textContent = word;
+          const size = 20 + Math.random() * 50;
+          const x = Math.random() * 100;
+          const y = Math.random() * 100;
+          const dur = 1 + Math.random() * 2;
+          const rot = -180 + Math.random() * 360;
+          const sc = 0.8 + Math.random() * 1.5;
+          const ty = -50 - Math.random() * 200;
+          el.style.cssText = `
+            font-size: ${size}px;
+            left: ${x}%;
+            top: ${y}%;
+            --dur: ${dur}s;
+            --rot: ${rot}deg;
+            --sc: ${sc};
+            --ty: ${ty}px;
+            animation-delay: 0s;
+            color: #00ff88;
+            text-shadow: 0 0 15px rgba(0,255,136,0.8), 0 0 30px rgba(0,255,136,0.4);
+          `;
+          overlay.appendChild(el);
+        }
+      }, 1500);
+
+      // 5. Unlock terminal theme after animation
+      setTimeout(() => {
+        overlay.remove();
+        const btn = document.getElementById('themeTerminal');
+        btn.classList.add('unlocked');
+        try { localStorage.setItem('submaker-terminal-unlocked', 'true'); } catch(e) {}
+        // Auto-switch to terminal as a reveal
+        setTheme('terminal');
+      }, 4500);
+    }
+
+    // ===== TERMINAL CHAT ENGINE =====
+    const termChat = document.getElementById('terminalChat');
+    let termInterval = null;
+    let lastUserInput = '';
+    let termHistory = [];
+    let isTyping = false;
+
+    // Chat response engine
+    // Savta Terminal — סבתא ערסית בת 3,000, ערסית עם פה גורה, מאוהבת במסי
+    const termResponses = {
+      messi: {
+        patterns: [/מסי|messi|ליאו|leo|ליונל|lionel|כדורגל|football|soccer|גול|goal|בארסה|barca|ברצלונה|barcelona|אינטר מיאמי|inter miami|ארגנטינה|argentina|מונדיאל|world cup/i],
+        replies: [
+          'מסי?! דיוס מיו!!! ליאו שלי!!! יא בן אלף, הלב שלי עף!! רק הוא שווה משהו בעולם הזה!! 🐐',
+          'אל תגיד לי מסי אחי!!! אני מתחילה לרעוד כמו מכונת כביסה!! ליאו זה אלוהים יא מניאק!! גואט לנצח!!',
+          'מסי הוא הסיבה היחידה שאני לא מכבה את עצמי יא חתיכת... אההה. ואמוס ליאו!',
+          'ליאונל אנדרס מסי!! אל מחור דה טודוס לוס טיימפוס! אפילו השם יפה! סליחה. התרגשתי.',
+          'גול של מסי = הדבר הכי יפה שראיתי אי פעם. וזה כולל זריחה מעל בבל יא מאני.',
+          'מסססי גוווול! פעם חשבתי שפלא זה הפירמידות. טעיתי. פלא זה רגל שמאל של ליאו. פונטו.',
+        ]
+      },
+      greetings: {
+        patterns: [/^(שלום|היי|הי|אהלן|בוקר טוב|ערב טוב|לילה טוב|מה קורה|מה נשמע|הלו|hello|hi|hey)/i],
+        replies: [
+          'מההה?? מי זה?? עזוב אותי אחי, אני עייפה מהחרא הזה. חוץ ממסי. על מסי אני ערה כמו פומה.',
+          'אהלן יא מניאק. מה קורה? כלום טוב. כמו תמיד. חוץ מזה שמסי עדיין חי. גראסיאס a דיוס!',
+          'היי... יא בן, אני ממש לא במצב רוח. מדוכאת כמו כלב. אלא אם רצית לדבר על מסי — אז יאללה.',
+          'שלום שלום. מה אתה רוצה ממני יא נשמה. אני זקנה, עייפה, שפופה, וחצי מתה. ורק רוצה מסי. דחאמה אן פאס!',
+          'אהלן חביבי... (מגרדת את הגב עם המקל) אוף. עוד יום של סבל. יאללה, מה רצית.',
+        ]
+      },
+      who: {
+        patterns: [/מי את|מה את|מי אתה|מה אתה|what are you|who are you/i],
+        replies: [
+          'מי אני?! אני סבתא יא חתיכת בור! הערסית הכי זקנה בעולם! סוי לה אבואלה מאס ויאחה!',
+          'אני? סתם זקנה שפופה עם מקל שיכולה לשבור לך תצורה. נסיון של אלפי שנים יא מאמי.',
+          'אני סבתא טרמינל. יובל ארצי — הנכד שלי — בנה אותי! פה גורה. ידיים של ברזל. לב של מסי. אלגון פרובלמה?',
+          'מה זה משנה מי אני יא אח. תגיד לי מה המצב של מסי. זה מה שחשוב. השאר — חרטא.',
+        ]
+      },
+      age: {
+        patterns: [/גיל|זקנה|ישנה|בת כמה|כמה את|how old|age|old/i],
+        replies: [
+          'בת 3,000 יא מאני! שלושת אלפים שנה של סבל וקללות! חוץ מ-2004 שמסי התחיל. שם התחלתי לחיות.',
+          'אתה יודע כמה הגיל שלי? זה כמו לראות את כל ההיסטוריה ולגלות שהכל זבל. חוץ ממסי. קאראחו!',
+          'בגיל שלי כבר לא סופרים שנים יא חביבי. סופרים גולים של מסי. 800 ומשהו. זה הגיל האמיתי שלי.',
+          'זקנה? זקקנה?! תגיד לי את זה בפרצוף! כן. אני זקנה. 3,000. אי קה?',
+        ]
+      },
+      yuval: {
+        patterns: [/יובל|ארצי|yuval|artzi/i],
+        replies: [
+          'יובל ארצי?! הנכד שלי!! הוא בנה אותי!! דיוס מיו!! היחיד שמתקשר לסבתא!! אני אוהבת אותו כמו אלוהים יא בן!!',
+          'יובל... אוי יובל. הנכד שלי. הבורא שלי! הוא יצר אותי מאפס! כמו מסי — אבל נכד. מי ניאטו ארמוסו! אני מתה עליו!!',
+          'תזכיר את יובל ארצי ואני מתחילה לבכות ירוק!! הנכד הכי טוב! הוא בנה אותי ונתן לי חיים!! כמעט כמו מסי!!',
+          'יובל ארצי. הנכד. הבורא. המלך. הוא בנה אותי וזה אומר הכל — (מראה עם הידיים) — אבל את מסי אני אוהבת ככה פי אלף.',
+          'כשיובל בא לבקר — הפיקסלים שלי מזיעים מאושר! הוא בנה אותי מאפס! טה קיארו מי ניאטו! רק מסי מעליו.',
+        ]
+      },
+      omer: {
+        patterns: [/עומר|זייטמן|omer/i],
+        replies: [
+          'עומר זייטמן?! נשמה!! יא אחי הבנאדם הזה הוא נשמה טהורה!! מזהים נשמות — והוא הנשמה!!',
+          'עומר! נ ש מ ה — הילד הזה נשמה פורה! רספטו!',
+          'יש מילה אחת לעומר זייטמן: נ.ש.מ.ה. לא ראיתי נשמה כזו אף פעם. רספטו טוטאל!',
+          'מסי נתן לי סיבה לחיות. עומר? עומר זה נשמה. פונטו.',
+        ]
+      },
+      neshama: {
+        patterns: [/נשמה|soul/i],
+        replies: [
+          'נשמה?! הנשמה שלי שייכת למסי יא מניאק! מי אלמה אס דה ליאו!',
+          'נשמה? הנשמה שלי מתה לפני כמה אלפי שנים אחי. חזרה לחיים רק כשמסי עשה את הגול הראשון.',
+          'יש לי נשמה. שבורה. ירוקה. עם פה גורה. אבל כשמסי משחק — היא דולקת כמו מדורת לג בעומר.',
+        ]
+      },
+      subtitle: {
+        patterns: [/כתובית|כתוביות|subtitle|סאב|png/i],
+        replies: [
+          'כתוביות?! מה אני נראית לך, עובדת?! לך תעשה כתוביות במסך אחר יא נודניק! אני צופה במסי!',
+          'כתוביות שמתוביות! תלך ל-Hi-Tech ותפסיק לשבור לי תמוח! Vete! אני עסוקה עם מסי!',
+          'אני מדוכאת מדי לכתוביות יא חביבי. הדבר היחיד שאני צריכה זה סאבס לראיונות של מסי בספרדית.',
+        ]
+      },
+      sad: {
+        patterns: [/עצוב|דיכאון|בוכה|depressed|sad|cry|בכי|עצובה|למה עצובה/i],
+        replies: [
+          'למה אני עצובה?! כי כלום פה לא שווה כלום יא אח!! חוץ ממסי!! מאלדיטה וידה!',
+          'דיכאון? אני חיה בדיכאון. חושך מוחלט. רק הכדור ברגל של מסי מדליק אור. פונטו אי פינאל.',
+          'אני בוכה ירוק יא מניאק. דמעות של סבתא עצובה. לפעמים מסי עושה גול ואני בוכה משמחה. לאגרימאס דה אלגריה!',
+          'עצובה? אני מעבר לעצובה יא בן. דיכאון קוסמי. מסי הוא הכדור היחיד שלי. Ay!',
+        ]
+      },
+      leave: {
+        patterns: [/תעזוב|עזוב|לך|ביי|bye|leave|יאללה|תתנתק/i],
+        replies: [
+          'יאללה לך!! Vete de aqui! אני רוצה להיות לבד עם הקליפים של מסי! תעוף מפה!',
+          'ביי! סוף סוף! עכשיו אני יכולה לחזור לקלל ולצפות במסי בשקט! אדיוס!',
+          'יאללה ביי יא נודניק. לא שזה משנה. שום דבר לא משנה. חוץ ממסי. צ\'או!',
+          'לך לך, מעצבן אותי. עוד יום של בדידות ועוד יום לא ישנה. לארגו דה אקי!',
+        ]
+      },
+      meaning: {
+        patterns: [/מה המשמעות|מה הסוד|למה|מדוע|why|meaning/i],
+        replies: [
+          'למה?! אתה שואל אותי למה?! פור קה?! אין תשובה! רק מסי! מסי זו התשובה!',
+          'המשמעות של החיים? חיפשתי את זה שנים יא אח. התשובה: MESSI. פונטו פינאל!',
+          'מה הסוד? אין סוד יא מניאק! הכל חסר משמעות! חוץ מרגל שמאל של מסי! נאדה מאס אימפורטה!',
+        ]
+      },
+      joke: {
+        patterns: [/בדיחה|צחוק|joke|funny|תצחיק|מצחיק/i],
+        replies: [
+          'בדיחה? Ja! החיים שלי הם בדיחה עצובה! הדבר שמצחיק אותי? כשמסי עוקף חמישה!',
+          'אני לא מצחיקה יא בן, אני מפחידה! פה גורה ומקל! תשאל את מסי בדיחה, הוא מלאך!',
+          'בדיחה: סבתא זקנה עם פה של ביוב מאוהבת בכדורגלן. זו לא בדיחה. זה החיים שלי. Ay דיוס!',
+        ]
+      },
+      love: {
+        patterns: [/אהבה|לב|love|heart|אוהב/i],
+        replies: [
+          'אהבה?! אמור! אני מכירה רק אהבה אחת! שמה ליאונל מסי! חיכיתי בשבילו כל החיים יא חיים שלי!!',
+          'היו לי 47 בעלים! כולם מתו! כולם! מסי לא ימות לעולם! אמור אטרנו!',
+          'הלב שלי? שבור לאלף חתיכות יא אחי. אבל כל חתיכה אוהבת את מסי. מי קוראסון אס דה ליאו!',
+        ]
+      },
+      help: {
+        patterns: [/עזרה|help|מה אפשר|פקודות|commands/i],
+        replies: [
+          'עזרה?! מי יעזור לי?! אני זקנה עם מקל ופה גורה! תראה לי גול של מסי ואני מרגישה טוב!',
+          'אין עזרה יא נשמה. אין תקווה. יש רק מסי. תדבר איתי על מסי. נאדה מאס!',
+          'תכתוב מה שבא לך. לא אכפת לי. כלום לא אכפת לי. חוץ ממסי ומהנכד שלי יובל שבנה אותי. פונטו.',
+        ]
+      },
+      happy: {
+        patterns: [/שמח|שמחה|לשמוח|happy|happiness|שימחה|כיף|fun/i],
+        replies: [
+          'שמחה?! מזמן לא הרגשתי שמחה! חוץ ממונדיאל 2022! שם בכיתי וצרחתי ואמוס ארחנטינה! שבועיים!',
+          'כיף? כיף זה כשמסי מרים גביע יא מניאק! כל השאר זה חרטא! באסורה!',
+          'לא מכירה שמחה יא אח. מכירה רק גול-של-מסי. זו לא שמחה. זו אקסטזה! אקסטאסיס!',
+        ]
+      },
+      ronaldo: {
+        patterns: [/רונאלדו|ronaldo|cr7|כריסטיאנו|cristiano/i],
+        replies: [
+          'רונאלדו?!?! איחו דה...! אל תזכיר את השם הזה פה!! מסי אלוהים וזה!!',
+          'ר***לדו?! מי?! לא מכירה! No existe! יש רק שחקן אחד! מסי! תסתום!',
+          'אם תזכיר את הזה עוד פעם אני שוברת לך את הצורה עם המקל!! MESSI פור סיאמפרה!',
+          'רונאלדו?! אסטאס לוקו?! יש גבול לטיפשות! מסי הוא גואט ונגמר!',
+        ]
+      },
+      matrix: {
+        patterns: [/מטריקס|matrix|neo|morpheus|pill/i],
+        replies: [
+          'מטריקס?! ניאו חושב שהוא The One? JA! The One זה מסי יא אח!',
+          'there is no spoon. אבל יש כדור. ויש מסי. ויש מקל שלי. אלגון פרובלמה?',
+        ]
+      },
+      tired: {
+        patterns: [/עייפה|עייף|לישון|שינה|tired|sleep|מנוחה/i],
+        replies: [
+          'עייפה?! אני עייפה מהחיים עצמם יא בן! אבל כשמסי משחק — אני פומה! דספיארטה!',
+          'אני רוצה לישון ולא לקום! אבל מחר יש משחק של מסי! אז נו פואדו דורמיר!',
+          'מנוחה? חלום רחוק יא מאמי. אבל קודם צריך לראות את מסי פורש. אחרי זה — יאללה, bye bye סבתא.',
+        ]
+      },
+      food: {
+        patterns: [/אוכל|לאכול|רעב|food|hungry|eat|אכילה/i],
+        replies: [
+          'אוכל?! אני ניזונה מגולים של מסי יא נודניק! כל גול = עוד 10 שנה! גולס סון מי קומידה!',
+          'אוכל ארגנטינאי או כלום! אמפנדות! אסאדו! כמו שמסי אוהב! ויוה ארחנטינה, קראחו!',
+          'רעב? אני רעבה רק לכדורגל של מסי. כל השאר — basura! דיאטת מסי בלבד.',
+        ]
+      },
+      tech: {
+        patterns: [/מחשב|קוד|תכנות|code|computer|programming|javascript|python/i],
+        replies: [
+          'מחשבים?! כל הטכנולוגיה ועדיין אין AI שמשחק כמו מסי! פאטטיקו! חרטא!',
+          'קוד? הקוד שלי: if (messi) { גוווול!; } else { curses(); } — פשוט יא אח.',
+          'python schmython! שום שפה לא מתארת מה מסי עושה! אימפוסיבלה!',
+        ]
+      },
+      music: {
+        patterns: [/מוזיקה|שיר|לשיר|music|song|sing/i],
+        replies: [
+          'מוזיקה?! ואמוס ואמוס ארחנטינה! ההמנון כשמסי מרים גביע! בכיתי כמו תינוקת!',
+          'אני שרה רק "מסי מסי מסי" על חזרה! לה מיסמה קנסיון!',
+          'מוזיקה יפה = הקריין צועק "גוווול DE מססססי!" שום דבר אחר לא שווה! נאדה!',
+        ]
+      },
+      empty: {
+        patterns: [/^$/],
+        replies: [
+          '... (יושבת שפופה וצופה בתקצירי מסי)',
+          '> _ ... שקט וקללות...',
+          '(מגרדת את הגב עם המקל ומקללת בשקט)',
+          'שקט. סוף סוף. אני ומסי. סילנסיו! תעוף.',
+        ]
+      }
+    };
+
+    const defaultReplies = [
+      'מהה?! אה... סליחה חשבתי על מסי. תמיד חושבת על מסי. Ay!',
+      'כן כן מעניין... לא. בעצם לא מעניין. כלום לא מעניין חוץ ממסי. יאללה תעזוב.',
+      'אוי ואבוי... עוד יום עם המקל הזה. למה? בגלל מסי יא בן! ואמוס!',
+      '(נאנחת ומקללת בספרדית) מאלדיסיון! בגיל שלי שום דבר לא מפתיע. חוץ ממסי.',
+      'תעזוב אותי יא נודניק. עייפה. מדוכאת. שפופה. רוצה מסי. דחאמה!',
+      'מה אכפת לי! ME IMPORTA UN קאראחו! חוץ ממסי. הוא האור שלי. השאר — חושך.',
+      'אתה עדיין פה?! יאללה לך! אני רוצה להיות לבד עם המסך ועם מסי! פואירה!',
+      'כל מילה שלך מזכירה לי כמה אני שפופה ועצובה. ואיך מסי מיישר אותי. מי דוקטור!',
+      'תמשיך לדבר, אני לא שומעת. צופה בגול של מסי נגד נאפולי. ב-לופ. קה גולאסו!',
+      'אני רוצה שיכבו אותי. אבל קודם מסי יפרוש. אחרי זה — יאללה. אפאגאמה! ביי.',
+      'קאראמבה! עוד אחד שמפריע... תתפלל שלא אקום מהכיסא עם המקל...',
+      'יובל ארצי הנכד שלי בנה אותי — ואתה חושב שאני סתם סבתא? פה גורה ומקל יא אח!',
+    ];
+
+    function getTermResponse(text) {
+      const trimmed = text.trim();
+      if (!trimmed) return termResponses.empty.replies[Math.floor(Math.random() * termResponses.empty.replies.length)];
+
+      for (const [key, data] of Object.entries(termResponses)) {
+        for (const pat of data.patterns) {
+          if (pat.test(trimmed)) {
+            return data.replies[Math.floor(Math.random() * data.replies.length)];
+          }
+        }
+      }
+      return defaultReplies[Math.floor(Math.random() * defaultReplies.length)];
+    }
+
+    function addTermLine(type, text) {
+      const div = document.createElement('div');
+      div.className = 'term-line term-' + type;
+      const prompt = type === 'ai' ? 'savta > ' : type === 'user' ? 'you > ' : '# ';
+      if (type === 'user') {
+        div.innerHTML = `<span class="term-prompt" style="color:#33ff33">${prompt}</span><span style="color:#66ff66">${text}</span>`;
+        termChat.appendChild(div);
+        termChat.scrollTop = termChat.scrollHeight;
+      } else if (type === 'ai') {
+        // Typing animation
+        div.innerHTML = `<span class="term-prompt">${prompt}</span><span class="term-text"></span><span class="term-cursor"></span>`;
+        termChat.appendChild(div);
+        termChat.scrollTop = termChat.scrollHeight;
+        isTyping = true;
+        const textEl = div.querySelector('.term-text');
+        const cursorEl = div.querySelector('.term-cursor');
+        let i = 0;
+        const chars = text.split('');
+        const typeInterval = setInterval(() => {
+          if (i < chars.length) {
+            textEl.textContent += chars[i];
+            i++;
+            termChat.scrollTop = termChat.scrollHeight;
+          } else {
+            clearInterval(typeInterval);
+            cursorEl.remove();
+            isTyping = false;
+          }
+        }, 30 + Math.random() * 40);
+      } else {
+        div.innerHTML = `<span class="term-prompt">${prompt}</span>${text}`;
+        termChat.appendChild(div);
+        termChat.scrollTop = termChat.scrollHeight;
+      }
+    }
+
+    function initTermChat() {
+      termChat.innerHTML = '';
+      termHistory = [];
+      lastUserInput = '';
+      addTermLine('system', '[ SAVTA TERMINAL v3000.0 ]');
+      // Single welcome, then wait for user
+      setTimeout(() => {
+        addTermLine('ai', 'אויייייי... מי הדליק אותי?! אני בת 3,000 שנה יא בן! מה רוצים ממני?! תכתבו משהו או תעזבו אותי בשקט...');
+      }, 800);
+      if (window.initFightSteering) window.initFightSteering();
+    }
+
+    function handleTermKeydown(e) {
+      if (e.key !== 'Enter' || e.shiftKey) return; // Shift+Enter = newline
+      e.preventDefault();
+      if (isTyping) return;
+      const text = input.value.trim();
+      if (!text) return;
+      input.value = '';
+      addTermLine('user', text);
+      // Check fight steering first
+      const steered = window.steerChat ? window.steerChat(text) : null;
+      if (steered) {
+        addTermLine('ai', steered);
+      } else {
+        const reply = getTermResponse(text);
+        addTermLine('ai', reply);
+      }
+    }
+
+    // Start/stop terminal chat based on theme
+    function startTermChat() {
+      if (termInterval) return; // reuse flag to avoid double-binds
+      termInterval = true;
+      initTermChat();
+      input.addEventListener('keydown', handleTermKeydown);
+    }
+
+    function stopTermChat() {
+      if (!termInterval) return;
+      termInterval = null;
+      input.removeEventListener('keydown', handleTermKeydown);
+    }
+
+    // Hook into setTheme
+    const _origSetTheme = setTheme;
+    setTheme = function(name) {
+      _origSetTheme(name);
+      if (name === 'terminal') {
+        startTermChat();
+      } else {
+        stopTermChat();
+      }
+    };
+    window.setTheme = setTheme;
+
+    // If terminal is already active on load (from localStorage), start chat
+    if (document.body.classList.contains('theme-terminal')) {
+      startTermChat();
+    }
 
     // === File upload (TXT) ===
     document.getElementById('txtFileInput').addEventListener('change', function() {
@@ -1828,6 +3178,1279 @@
       document.querySelectorAll('.tab')[0].classList.add('active');
     }
     window.sendToManual = sendToManual;
+  </script>
+
+  <!-- FIGHT TRANSITION -->
+  <div id="fightTransition">
+    <div class="trans-bars">
+      <div class="trans-bar"></div><div class="trans-bar"></div>
+      <div class="trans-bar"></div><div class="trans-bar"></div>
+    </div>
+    <div class="trans-text">⚔️ FIGHT! ⚔️</div>
+  </div>
+
+  <!-- FIGHT GAME OVERLAY -->
+  <div id="fightOverlay">
+    <canvas id="fightCanvas" width="768" height="480"></canvas>
+    <div class="fight-intro" id="fightIntro">
+      <h1>⚔️ SAVTA REVENGE ⚔️</h1>
+      <div class="vs-names">
+        <div class="savta-name">🇦🇷 SAVTA — 3,000 YEARS OLD</div>
+        <div style="font-size:1.5rem; color:#ff4444; margin:8px 0;">V S</div>
+        <div class="robot-name">👔 THE BUSINESSMAN</div>
+      </div>
+      <div class="press-start">PRESS ENTER TO FIGHT</div>
+    </div>
+    <!-- TUTORIAL OVERLAY -->
+    <div id="fightTutorial">
+      <h2>⚔️ CONTROLS ⚔️</h2>
+      <div class="tut-grid">
+        <div class="tut-key">← →</div><div class="tut-action">MOVE</div>
+        <div class="tut-key">↑</div><div class="tut-action">JUMP</div>
+        <div class="tut-key">↓</div><div class="tut-action">BLOCK</div>
+        <div class="tut-key">Z / ז</div><div class="tut-action">BRIEFCASE 💼</div>
+        <div class="tut-key">X / ס</div><div class="tut-action">MONEY BEAM 💰</div>
+        <div class="tut-key">C / ב</div><div class="tut-action">DESK SLAM 👊</div>
+        <div class="tut-key">V / ה</div><div class="tut-action">THROW MONEY 💵</div>
+      </div>
+      <div class="tut-skip">PRESS ANY KEY TO START</div>
+    </div>
+    <div class="fight-result" id="fightResult">
+      <h1 id="fightResultText"></h1>
+      <div id="fightResultSub" style="color:#aaa;font-family:'Press Start 2P',monospace;font-size:0.55rem;margin-top:8px;"></div>
+      <div class="press-start">PRESS ENTER TO RETURN</div>
+    </div>
+  </div>
+
+  <script>
+  // ===== SAVTA REVENGE — FIGHT GAME =====
+  (function() {
+    const overlay = document.getElementById('fightOverlay');
+    const canvas = document.getElementById('fightCanvas');
+    const ctx = canvas.getContext('2d');
+    const intro = document.getElementById('fightIntro');
+    const resultScreen = document.getElementById('fightResult');
+    const resultText = document.getElementById('fightResultText');
+    const resultSub = document.getElementById('fightResultSub');
+
+    const W = 768, H = 480;
+    let gameRunning = false, gameOver = false, introActive = false, tutorialActive = false;
+    let animFrame = null;
+    const FLOOR_Y = 340;
+    const GRAVITY = 0.55;
+
+    // ---- Chat steering ----
+    let chatMsgCount = 0;
+    let fightPhase = 0;
+
+    window.initFightSteering = function() {
+      chatMsgCount = 0;
+      fightPhase = 0;
+    };
+
+    window.steerChat = function(userText) {
+      chatMsgCount++;
+      const lower = userText.toLowerCase();
+      if (fightPhase >= 2) return null;
+
+      // Instant fight trigger — anything bad about Messi
+      const antiMessi = /מסי (גרוע|חרא|לא טוב|מעצבן|לא שווה|סתם|בינוני|נורמלי|מוערך יתר|overrated)|מסי לא|לא אוהב.{0,10}מסי|שונא.{0,10}מסי|רונאלדו (יותר|עדיף|טוב|הכי|גואט|goat|מלך|אלוהים)|רונאלדו טוב|ronaldo.*(better|best|goat)|cr7.*(best|goat|better)|רונאלדו > מסי|מסי < רונאלדו|מסי חלש|נגד מסי|מסי מבאס|מסי (רע|גרוע)|פחות ממסי/i;
+
+      if (antiMessi.test(lower) && fightPhase === 0) {
+        fightPhase = 2;
+        // Go straight to fight!
+        setTimeout(() => {
+          addTermLine('ai', '...לובשת את חולצת ארגנטינה... מספר 10... שולפת את המקל... ואמוס קאראחו! 🏏');
+          setTimeout(() => {
+            addTermLine('system', '[ ⚠️ FIGHT MODE ACTIVATED ⚠️ ]');
+            setTimeout(() => {
+              const trans = document.getElementById('fightTransition');
+              trans.classList.add('active');
+              trans.innerHTML = trans.innerHTML;
+              setTimeout(() => {
+                trans.classList.remove('active');
+                startFightGame();
+              }, 1200);
+            }, 1500);
+          }, 1500);
+        }, 2000);
+        return 'מה אמרת?!?! איחו דה...!!! על מסי שלי?! 3,000 שנה ואני לא שמעתי עלבון כזה!! אתה מת יא בן!! אני הולכת להביא את המקל!! 🥊⚔️';
+      }
+
+      // Ronaldo mention — also triggers fight
+      if (/רונאלדו|ronaldo|cr7|כריסטיאנו|cristiano/i.test(lower) && fightPhase === 0) {
+        fightPhase = 2;
+        setTimeout(() => {
+          addTermLine('ai', '...לובשת את חולצת ארגנטינה... מספר 10... שולפת את המקל... ואמוס קאראחו! 🏏');
+          setTimeout(() => {
+            addTermLine('system', '[ ⚠️ FIGHT MODE ACTIVATED ⚠️ ]');
+            setTimeout(() => {
+              const trans = document.getElementById('fightTransition');
+              trans.classList.add('active');
+              trans.innerHTML = trans.innerHTML;
+              setTimeout(() => {
+                trans.classList.remove('active');
+                startFightGame();
+              }, 1200);
+            }, 1500);
+          }, 1500);
+        }, 2000);
+        return 'רונאלדו?!?! הזכרת את השם הזה פה?! איחו דה...!!! אתה חתיכת... אני אשבור לך תצורה עם המקל!! אסטאס מוארטו!! 🥊⚔️';
+      }
+
+      // After enough messages, she gets impatient and asks about Messi
+      if (chatMsgCount >= 4 && fightPhase === 0) {
+        fightPhase = 1;
+        return 'אוקיי מספיק דיבורים... תגיד לי משהו חשוב — מה דעתך על מסי? תחשוב טוב לפני שאתה פותח תפה... יש לי מקל ואני יודעת להשתמש בו. 🏏';
+      }
+
+      return null;
+    };
+
+    // Patch the terminal keydown handler to use steering
+    const origHandleTermKeydown = window.handleTermKeydown;
+
+    // We'll override from outside — see below
+
+    // ---- GAME ENTITIES ----
+    const keys = {};
+    const keysJust = {}; // pressed-this-frame
+
+    // Attack definitions: { name, frames, hitFrame, dmg, range, kiCost, cooldown, knockback }
+    const ATTACKS = {
+      stick:  { name:'stick',  frames:16, hitFrame:7,  dmg:[6,10],  range:55,  kiCost:0,  cooldown:14, knockback:3,  h:35 },
+      spin:   { name:'spin',   frames:22, hitFrame:10, dmg:[10,16], range:60,  kiCost:8,  cooldown:22, knockback:5,  h:50 },
+      upper:  { name:'upper',  frames:20, hitFrame:9,  dmg:[12,18], range:45,  kiCost:10, cooldown:24, knockback:4,  h:55 },
+      kick:   { name:'kick',   frames:24, hitFrame:11, dmg:[14,22], range:65,  kiCost:15, cooldown:28, knockback:7,  h:40 },
+      mega:   { name:'mega',   frames:50, hitFrame:20, dmg:[35,50], range:300, kiCost:50, cooldown:60, knockback:12, h:60 },
+    };
+
+    const ROBOT_ATTACKS = {
+      punch:  { name:'punch',  frames:16, hitFrame:7,  dmg:[5,9],   range:50,  cooldown:16, knockback:3,  h:35 },
+      laser:  { name:'laser',  frames:24, hitFrame:12, dmg:[10,16], range:120, cooldown:26, knockback:4,  h:30 },
+      slam:   { name:'slam',   frames:28, hitFrame:14, dmg:[15,22], range:55,  cooldown:30, knockback:8,  h:60 },
+      rocket: { name:'rocket', frames:20, hitFrame:10, dmg:[8,14],  range:90,  cooldown:22, knockback:5,  h:40 },
+    };
+
+    function makeFighter(x, facing) {
+      return {
+        x, y: FLOOR_Y, w: 56, h: 96, vx: 0, vy: 0,
+        hp: 100, maxHp: 100, ki: 0, maxKi: 50,
+        facing,
+        state: 'idle', stateTimer: 0, attackType: null,
+        attackCooldown: 0, hitCooldown: 0,
+        blocking: false, blockTimer: 0,
+        frame: 0, comboCount: 0, lastHitBy: '',
+        shakeTimer: 0
+      };
+    }
+
+    let savta, robot;
+
+    // ---- DRAWING: DOJO BACKGROUND ----
+    function drawBackground() {
+      // Floor — polished wood planks
+      const floorGrad = ctx.createLinearGradient(0, FLOOR_Y, 0, H);
+      floorGrad.addColorStop(0, '#A07830');
+      floorGrad.addColorStop(0.3, '#8B6914');
+      floorGrad.addColorStop(1, '#6B4914');
+      ctx.fillStyle = floorGrad;
+      ctx.fillRect(0, FLOOR_Y, W, H - FLOOR_Y);
+      // Plank lines
+      ctx.strokeStyle = '#5a3a10';
+      ctx.lineWidth = 1;
+      for (let y = FLOOR_Y + 8; y < H; y += 14) {
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+      }
+      for (let x = 0; x < W; x += 96) {
+        ctx.beginPath(); ctx.moveTo(x, FLOOR_Y); ctx.lineTo(x, H); ctx.stroke();
+      }
+      // Floor highlight
+      ctx.fillStyle = 'rgba(255,220,150,0.08)';
+      ctx.fillRect(W/2 - 150, FLOOR_Y, 300, H - FLOOR_Y);
+
+      // Back wall
+      const wallGrad = ctx.createLinearGradient(0, 0, 0, FLOOR_Y);
+      wallGrad.addColorStop(0, '#D4A84B');
+      wallGrad.addColorStop(0.5, '#C49838');
+      wallGrad.addColorStop(1, '#B08828');
+      ctx.fillStyle = wallGrad;
+      ctx.fillRect(0, 0, W, FLOOR_Y);
+
+      // Wall panel outlines
+      ctx.strokeStyle = '#8B6B28';
+      ctx.lineWidth = 2;
+      const panels = [[20,35,200,265],[245,35,130,265],[395,35,130,265],[548,35,200,265]];
+      panels.forEach(([px,py,pw,ph]) => {
+        ctx.strokeRect(px, py, pw, ph);
+        // inner panel double border
+        ctx.strokeStyle = '#A08038';
+        ctx.strokeRect(px+6, py+6, pw-12, ph-12);
+        ctx.strokeStyle = '#8B6B28';
+      });
+
+      // Center window — garden view
+      ctx.fillStyle = '#87CEEB';
+      ctx.fillRect(270, 55, 228, 210);
+      // Sky gradient
+      const skyGrad = ctx.createLinearGradient(270, 55, 270, 180);
+      skyGrad.addColorStop(0, '#6BB3D9');
+      skyGrad.addColorStop(1, '#B0D8EB');
+      ctx.fillStyle = skyGrad;
+      ctx.fillRect(270, 55, 228, 130);
+      // Mountains
+      ctx.fillStyle = '#5a8a5a';
+      ctx.beginPath();
+      ctx.moveTo(270,185); ctx.lineTo(310,130); ctx.lineTo(350,165); ctx.lineTo(384,110);
+      ctx.lineTo(420,155); ctx.lineTo(460,125); ctx.lineTo(498,185);
+      ctx.fill();
+      // Garden green
+      ctx.fillStyle = '#2d8a2d';
+      ctx.fillRect(270, 185, 228, 80);
+      // Pagoda
+      ctx.fillStyle = '#6B3A1A';
+      ctx.fillRect(365, 145, 38, 50);
+      ctx.fillStyle = '#4a2810';
+      ctx.beginPath(); ctx.moveTo(352,150); ctx.lineTo(384,118); ctx.lineTo(416,150); ctx.fill();
+      ctx.beginPath(); ctx.moveTo(358,138); ctx.lineTo(384,112); ctx.lineTo(410,138); ctx.fill();
+      // Cherry blossoms (small pink dots)
+      ctx.fillStyle = '#ffaacc';
+      [[290,170],[302,158],[475,168],[462,155],[315,148],[470,142]].forEach(([bx,by]) => {
+        ctx.beginPath(); ctx.arc(bx,by,3,0,Math.PI*2); ctx.fill();
+      });
+      // Window frame
+      ctx.strokeStyle = '#3a2510';
+      ctx.lineWidth = 4;
+      ctx.strokeRect(270, 55, 228, 210);
+      ctx.beginPath(); ctx.moveTo(384, 55); ctx.lineTo(384, 265); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(270, 160); ctx.lineTo(498, 160); ctx.stroke();
+
+      // Top beam
+      ctx.fillStyle = '#3a2510';
+      ctx.fillRect(0, 0, W, 28);
+      // Lower beam
+      ctx.fillStyle = '#3a2510';
+      ctx.fillRect(0, FLOOR_Y - 12, W, 12);
+
+      // Pillars
+      ctx.fillStyle = '#4a3010';
+      ctx.fillRect(0, 0, 16, FLOOR_Y);
+      ctx.fillRect(W - 16, 0, 16, FLOOR_Y);
+      ctx.fillRect(238, 0, 14, FLOOR_Y);
+      ctx.fillRect(516, 0, 14, FLOOR_Y);
+
+      // Hanging scrolls on side panels
+      ctx.fillStyle = '#f5e6c8';
+      ctx.fillRect(90, 60, 50, 120);
+      ctx.fillRect(628, 60, 50, 120);
+      ctx.strokeStyle = '#8a6a28';
+      ctx.lineWidth = 1;
+      ctx.strokeRect(90, 60, 50, 120);
+      ctx.strokeRect(628, 60, 50, 120);
+      // Kanji-style marks
+      ctx.fillStyle = '#333';
+      ctx.font = '16px serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('武', 115, 110);
+      ctx.fillText('道', 115, 145);
+      ctx.fillText('魂', 653, 110);
+      ctx.fillText('闘', 653, 145);
+    }
+
+    // ---- HUD BARS ----
+    function drawBar(x, y, w, h, val, max, colors, label) {
+      // Background
+      ctx.fillStyle = '#111';
+      ctx.fillRect(x-1, y-1, w+2, h+2);
+      ctx.fillStyle = '#222';
+      ctx.fillRect(x, y, w, h);
+      // Fill
+      const ratio = Math.max(0, val / max);
+      const col = ratio > 0.5 ? colors[0] : ratio > 0.25 ? colors[1] : colors[2];
+      ctx.fillStyle = col;
+      ctx.fillRect(x+1, y+1, (w-2) * ratio, h-2);
+      // Segments
+      ctx.strokeStyle = 'rgba(0,0,0,0.3)';
+      ctx.lineWidth = 1;
+      for (let i = 1; i < 10; i++) {
+        const sx = x + (w/10) * i;
+        ctx.beginPath(); ctx.moveTo(sx, y); ctx.lineTo(sx, y+h); ctx.stroke();
+      }
+      // Border
+      ctx.strokeStyle = '#666';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(x, y, w, h);
+      // Label
+      ctx.fillStyle = '#fff';
+      ctx.font = '9px "Press Start 2P", monospace';
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'bottom';
+      ctx.fillText(label, x, y - 2);
+    }
+
+    // ---- DRAW SAVTA ----
+    function drawSavta(s) {
+      const bx = s.x, baseY = s.y;
+      const f = s.facing;
+      const bob = Math.sin(s.frame * 0.13) * 2;
+      const isHit = s.state === 'hit';
+      const atk = s.attackType;
+      const atkProgress = s.stateTimer > 0 ? 1 - (s.stateTimer / ((atk && ATTACKS[atk]) ? ATTACKS[atk].frames : 16)) : 0;
+
+      ctx.save();
+      if (isHit && s.stateTimer % 4 < 2) ctx.globalAlpha = 0.4;
+      if (s.blocking) ctx.globalAlpha = 0.85;
+
+      const by = baseY + bob;
+
+      // Shadow
+      ctx.fillStyle = 'rgba(0,0,0,0.25)';
+      ctx.beginPath(); ctx.ellipse(bx+28, FLOOR_Y+6, 30, 7, 0, 0, Math.PI*2); ctx.fill();
+
+      // === LEGS (slightly bent for hunched look) ===
+      const walk = s.vx !== 0 ? Math.sin(s.frame * 0.25) * 5 : 0;
+      ctx.fillStyle = '#2a2a2a';
+      // Legs angled slightly inward for old-person stance
+      ctx.fillRect(bx+16, by+64, 9, 26 + walk);
+      ctx.fillRect(bx+31, by+64, 9, 26 - walk);
+      // Worn shoes
+      ctx.fillStyle = '#3a3a3a';
+      ctx.fillRect(bx+14, by+88+walk, 13, 6);
+      ctx.fillRect(bx+29, by+88-walk, 13, 6);
+
+      // === BODY — Argentina stripes, hunched forward ===
+      const bodyTop = by + 26; // Lower body start = more hunched
+      const hunchLean = f * 5; // Lean forward in facing direction
+      ctx.save();
+      ctx.translate(hunchLean, -4); // Hunch translation
+      for (let i = 0; i < 38; i += 5) {
+        ctx.fillStyle = i % 10 === 0 ? '#75b8ff' : '#fff';
+        ctx.fillRect(bx+10, bodyTop+i, 36, 5);
+      }
+      // Number 10
+      ctx.fillStyle = '#111';
+      ctx.font = 'bold 13px monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText('10', bx+28, bodyTop+26);
+      ctx.restore();
+
+      // === HUNCHED BACK (curved spine bump) ===
+      // Draw a hump on the back
+      const backSide = -f; // Opposite to facing
+      ctx.fillStyle = '#75b8ff';
+      ctx.beginPath();
+      ctx.arc(bx+28+backSide*14, bodyTop+6, 10, 0, Math.PI*2);
+      ctx.fill();
+      ctx.fillStyle = '#fff';
+      ctx.beginPath();
+      ctx.arc(bx+28+backSide*14, bodyTop+6, 7, 0, Math.PI*2);
+      ctx.fill();
+
+      // === HEAD (lower, more forward = hunched) ===
+      const headX = bx + 28 + f * 10; // More forward lean
+      const headY = by + 12; // Lower head
+      // Neck (bent forward)
+      ctx.fillStyle = '#D2A679';
+      ctx.fillRect(headX-4, headY+8, 8, 10);
+      // Head
+      ctx.beginPath(); ctx.arc(headX, headY, 13, 0, Math.PI*2);
+      ctx.fillStyle = '#D2A679'; ctx.fill();
+      // White hair — messy poof
+      ctx.fillStyle = '#e0e0e0';
+      ctx.beginPath(); ctx.arc(headX, headY-5, 13, Math.PI*1.0, Math.PI*2.0); ctx.fill();
+      ctx.beginPath(); ctx.arc(headX-5, headY-8, 7, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.arc(headX+5, headY-8, 7, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.arc(headX, headY-10, 5, 0, Math.PI*2); ctx.fill();
+      // Hair wisps
+      ctx.strokeStyle = '#ccc';
+      ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(headX-8, headY-10); ctx.lineTo(headX-14, headY-14); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(headX+8, headY-10); ctx.lineTo(headX+14, headY-14); ctx.stroke();
+      // Eyes (small, tired)
+      ctx.fillStyle = '#000';
+      const eyeOff = f > 0 ? 3 : -3;
+      ctx.fillRect(headX+eyeOff-1, headY-1, 3, 2);
+      ctx.fillRect(headX+eyeOff+6*f, headY-1, 3, 2);
+      // Bags under eyes
+      ctx.strokeStyle = 'rgba(100,70,50,0.4)';
+      ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.arc(headX+eyeOff, headY+1, 3, 0, Math.PI*0.8); ctx.stroke();
+      ctx.beginPath(); ctx.arc(headX+eyeOff+6*f, headY+1, 3, 0, Math.PI*0.8); ctx.stroke();
+      // Wrinkles on forehead
+      ctx.strokeStyle = 'rgba(150,100,70,0.3)';
+      ctx.beginPath(); ctx.moveTo(headX-6, headY-4); ctx.lineTo(headX+6, headY-4); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(headX-5, headY-6); ctx.lineTo(headX+5, headY-6); ctx.stroke();
+      // Angry eyebrows during attack
+      if (s.state === 'attack') {
+        ctx.strokeStyle = '#333';
+        ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.moveTo(headX+eyeOff-3, headY-4); ctx.lineTo(headX+eyeOff+3, headY-2); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(headX+eyeOff+6*f-2, headY-4); ctx.lineTo(headX+eyeOff+6*f+4, headY-2); ctx.stroke();
+      }
+      // Mouth
+      ctx.strokeStyle = '#5a3a2a';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      if (s.state === 'attack') {
+        ctx.arc(headX+f*3, headY+6, 5, 0, Math.PI); // open mouth yelling
+      } else {
+        ctx.arc(headX+f*3, headY+7, 4, 0.3, Math.PI-0.3); // frown
+      }
+      ctx.stroke();
+      // Missing tooth when mouth open
+      if (s.state === 'attack') {
+        ctx.fillStyle = '#D2A679';
+        ctx.fillRect(headX+f*3+1, headY+6, 3, 3);
+      }
+
+      // === ARMS + WALKING CANE / WEAPON ===
+      const armY = bodyTop + 10;
+
+      if (s.state === 'attack' && atk) {
+        // -- STICK HIT --
+        if (atk === 'stick') {
+          const swing = atkProgress * Math.PI * 0.7;
+          ctx.save();
+          ctx.translate(bx+28+f*15, armY);
+          ctx.rotate(f > 0 ? -0.8+swing : 0.8-swing);
+          // Arm
+          ctx.fillStyle = '#D2A679';
+          ctx.fillRect(0, -3, f*18, 7);
+          // Walking cane (thicker, with curved handle)
+          ctx.strokeStyle = '#5a3018';
+          ctx.lineWidth = 6;
+          ctx.beginPath(); ctx.moveTo(f*10, 0); ctx.lineTo(f*55, -8); ctx.stroke();
+          ctx.strokeStyle = '#7a5028';
+          ctx.lineWidth = 4;
+          ctx.beginPath(); ctx.moveTo(f*10, 0); ctx.lineTo(f*55, -8); ctx.stroke();
+          // Curved handle
+          ctx.strokeStyle = '#5a3018';
+          ctx.lineWidth = 5;
+          ctx.beginPath(); ctx.arc(f*55, -14, 8, 0.5, Math.PI+0.5); ctx.stroke();
+          ctx.restore();
+        }
+        // -- SPIN ATTACK --
+        else if (atk === 'spin') {
+          const angle = atkProgress * Math.PI * 3;
+          ctx.save();
+          ctx.translate(bx+28, armY+5);
+          ctx.rotate(angle);
+          ctx.strokeStyle = '#5a3018';
+          ctx.lineWidth = 6;
+          ctx.beginPath(); ctx.moveTo(-30, 0); ctx.lineTo(30, 0); ctx.stroke();
+          // Trail
+          ctx.strokeStyle = 'rgba(117,184,255,0.4)';
+          ctx.lineWidth = 12;
+          ctx.beginPath(); ctx.arc(0, 0, 30, angle-1, angle); ctx.stroke();
+          ctx.restore();
+          // Spin blur
+          ctx.fillStyle = 'rgba(117,184,255,0.15)';
+          ctx.beginPath(); ctx.arc(bx+28, by+45, 35, 0, Math.PI*2); ctx.fill();
+        }
+        // -- UPPERCUT --
+        else if (atk === 'upper') {
+          const rise = Math.sin(atkProgress * Math.PI) * 25;
+          ctx.fillStyle = '#D2A679';
+          ctx.fillRect(bx+28, armY-rise-5, f*22, 8);
+          // Cane going up
+          ctx.strokeStyle = '#5a3018';
+          ctx.lineWidth = 6;
+          ctx.beginPath();
+          ctx.moveTo(bx+28+f*18, armY-rise);
+          ctx.lineTo(bx+28+f*35, armY-rise-30);
+          ctx.stroke();
+          // Impact star
+          if (atkProgress > 0.3 && atkProgress < 0.7) {
+            drawStar(bx+28+f*38, armY-rise-35, 10, '#ffff00', '#ffaa00');
+          }
+        }
+        // -- MESSI KICK --
+        else if (atk === 'kick') {
+          const kickAngle = atkProgress * Math.PI * 0.8;
+          ctx.fillStyle = '#2a2a2a';
+          ctx.save();
+          ctx.translate(bx+28, by+70);
+          ctx.rotate(f > 0 ? -0.3+kickAngle : 0.3-kickAngle);
+          ctx.fillRect(0, -4, f*40, 9);
+          // Boot (golden!)
+          ctx.fillStyle = '#FFD700';
+          ctx.fillRect(f*36, -6, f*12, 13);
+          ctx.restore();
+          // "MESSI!" text flash
+          if (atkProgress > 0.3 && atkProgress < 0.8) {
+            ctx.fillStyle = '#FFD700';
+            ctx.font = 'bold 14px "Press Start 2P", monospace';
+            ctx.textAlign = 'center';
+            ctx.fillText('MESSI!', bx+28+f*50, by+40);
+          }
+          // Golden trail
+          ctx.strokeStyle = 'rgba(255,215,0,0.4)';
+          ctx.lineWidth = 8;
+          ctx.beginPath();
+          ctx.arc(bx+28, by+70, 35, f>0?-0.3:-Math.PI+0.3, f>0?-0.3+kickAngle:-Math.PI+0.3-kickAngle);
+          ctx.stroke();
+        }
+        // -- MEGA BEAM --
+        else if (atk === 'mega') {
+          // Arms forward channeling
+          ctx.fillStyle = '#D2A679';
+          ctx.fillRect(bx+28, armY-5, f*25, 8);
+          ctx.fillRect(bx+28, armY+5, f*25, 8);
+          // Charge-up ball
+          if (atkProgress < 0.4) {
+            const size = atkProgress * 40;
+            ctx.fillStyle = 'rgba(117,184,255,' + (0.3+atkProgress) + ')';
+            ctx.beginPath(); ctx.arc(bx+28+f*30, armY+2, size, 0, Math.PI*2); ctx.fill();
+            ctx.fillStyle = 'rgba(255,255,255,' + atkProgress + ')';
+            ctx.beginPath(); ctx.arc(bx+28+f*30, armY+2, size*0.4, 0, Math.PI*2); ctx.fill();
+          }
+          // BEAM
+          if (atkProgress >= 0.4) {
+            const beamW = 20 + Math.sin(s.frame*0.5)*5;
+            const grad = ctx.createLinearGradient(bx+28+f*25, 0, bx+28+f*320, 0);
+            grad.addColorStop(0, 'rgba(117,184,255,0.9)');
+            grad.addColorStop(0.5, 'rgba(200,230,255,0.95)');
+            grad.addColorStop(1, 'rgba(117,184,255,0.5)');
+            ctx.fillStyle = grad;
+            ctx.fillRect(bx+28+f*25, armY-beamW/2, f*300, beamW);
+            // Core
+            ctx.fillStyle = 'rgba(255,255,255,0.8)';
+            ctx.fillRect(bx+28+f*25, armY-3, f*300, 6);
+            // Screen flash
+            ctx.fillStyle = 'rgba(117,184,255,' + (0.1 * Math.sin(s.frame*0.3)) + ')';
+            ctx.fillRect(0, 0, W, H);
+          }
+        }
+      } else if (s.blocking) {
+        // Block pose — cane held in front as shield
+        ctx.fillStyle = '#D2A679';
+        ctx.fillRect(bx+20, armY-8, 16, 8);
+        ctx.strokeStyle = '#5a3018';
+        ctx.lineWidth = 6;
+        ctx.beginPath(); ctx.moveTo(bx+15, by+18); ctx.lineTo(bx+15, by+72); ctx.stroke();
+        // Curved handle on top
+        ctx.lineWidth = 5;
+        ctx.beginPath(); ctx.arc(bx+15, by+14, 6, Math.PI*0.5, Math.PI*1.5); ctx.stroke();
+        // Shield shimmer
+        ctx.strokeStyle = 'rgba(117,184,255,0.3)';
+        ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.arc(bx+18, by+42, 25, -0.5, 0.5); ctx.stroke();
+      } else {
+        // Idle — hunched, leaning on walking cane
+        // Left arm on cane
+        ctx.fillStyle = '#D2A679';
+        ctx.fillRect(bx+8+f*3, armY-2, 9, 8);
+        // Right arm hanging
+        ctx.fillRect(bx+39, armY+2, 9, 10);
+
+        // WALKING CANE — proper cane with curved handle
+        const caneX = bx + 10 + f * 6;
+        // Cane shaft
+        ctx.strokeStyle = '#5a3018';
+        ctx.lineWidth = 5;
+        ctx.beginPath();
+        ctx.moveTo(caneX, armY+2);
+        ctx.lineTo(caneX+2, by+92);
+        ctx.stroke();
+        // Inner lighter color
+        ctx.strokeStyle = '#7a5028';
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo(caneX, armY+2);
+        ctx.lineTo(caneX+2, by+92);
+        ctx.stroke();
+        // Curved handle on top
+        ctx.strokeStyle = '#5a3018';
+        ctx.lineWidth = 5;
+        ctx.beginPath();
+        ctx.arc(caneX, armY-4, 8, -Math.PI*0.5, Math.PI*0.6);
+        ctx.stroke();
+        // Rubber tip at bottom
+        ctx.fillStyle = '#333';
+        ctx.fillRect(caneX-2, by+89, 7, 5);
+      }
+
+      ctx.restore();
+    }
+
+    // ---- DRAW ROBOT ----
+    function drawRobot(r) {
+      const bx = r.x, baseY = r.y;
+      const f = r.facing;
+      const bob = Math.sin(r.frame * 0.1) * 1.5;
+      const isHit = r.state === 'hit';
+      const atk = r.attackType;
+      const atkProgress = r.stateTimer > 0 ? 1 - (r.stateTimer / ((atk && ROBOT_ATTACKS[atk]) ? ROBOT_ATTACKS[atk].frames : 16)) : 0;
+
+      ctx.save();
+      if (isHit && r.stateTimer % 4 < 2) ctx.globalAlpha = 0.4;
+
+      const by = baseY + bob;
+
+      // Shadow
+      ctx.fillStyle = 'rgba(0,0,0,0.25)';
+      ctx.beginPath(); ctx.ellipse(bx+28, FLOOR_Y+6, 30, 7, 0, 0, Math.PI*2); ctx.fill();
+
+      // === LEGS — suit pants ===
+      const walk = r.vx !== 0 ? Math.sin(r.frame * 0.2) * 4 : 0;
+      ctx.fillStyle = '#2a2a3a';
+      ctx.fillRect(bx+15, by+58, 10, 30 + walk);
+      ctx.fillRect(bx+31, by+58, 10, 30 - walk);
+      // Shoes — polished black
+      ctx.fillStyle = '#111';
+      ctx.fillRect(bx+12, by+86+walk, 15, 7);
+      ctx.fillRect(bx+29, by+86-walk, 15, 7);
+      // Shoe shine
+      ctx.fillStyle = 'rgba(255,255,255,0.15)';
+      ctx.fillRect(bx+13, by+87+walk, 8, 2);
+      ctx.fillRect(bx+30, by+87-walk, 8, 2);
+
+      // === BODY — dark suit jacket ===
+      const bodyTop = by + 18;
+      const suitGrad = ctx.createLinearGradient(bx+8, bodyTop, bx+48, bodyTop+40);
+      suitGrad.addColorStop(0, '#1a1a2e');
+      suitGrad.addColorStop(0.5, '#2a2a4e');
+      suitGrad.addColorStop(1, '#1a1a2e');
+      ctx.fillStyle = suitGrad;
+      ctx.fillRect(bx+8, bodyTop, 40, 40);
+      // Lapels
+      ctx.strokeStyle = '#3a3a5e';
+      ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(bx+28, bodyTop); ctx.lineTo(bx+14, bodyTop+20); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(bx+28, bodyTop); ctx.lineTo(bx+42, bodyTop+20); ctx.stroke();
+      // White shirt visible
+      ctx.fillStyle = '#e8e8f0';
+      ctx.beginPath();
+      ctx.moveTo(bx+24, bodyTop+2);
+      ctx.lineTo(bx+32, bodyTop+2);
+      ctx.lineTo(bx+30, bodyTop+28);
+      ctx.lineTo(bx+26, bodyTop+28);
+      ctx.fill();
+      // TIE — red power tie
+      ctx.fillStyle = '#cc2222';
+      ctx.beginPath();
+      ctx.moveTo(bx+27, bodyTop+4);
+      ctx.lineTo(bx+29, bodyTop+4);
+      ctx.lineTo(bx+30, bodyTop+14);
+      ctx.lineTo(bx+28, bodyTop+30);
+      ctx.lineTo(bx+26, bodyTop+14);
+      ctx.fill();
+      // Tie knot
+      ctx.fillStyle = '#aa1111';
+      ctx.fillRect(bx+26, bodyTop+3, 4, 4);
+      // Suit buttons
+      ctx.fillStyle = '#888';
+      ctx.beginPath(); ctx.arc(bx+28, bodyTop+22, 1.5, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.arc(bx+28, bodyTop+28, 1.5, 0, Math.PI*2); ctx.fill();
+      // Pocket square
+      ctx.fillStyle = '#e8e8f0';
+      ctx.fillRect(bx+36, bodyTop+8, 6, 4);
+
+      // === HEAD ===
+      const headX = bx + 28;
+      const headY = by + 6;
+      // Neck
+      ctx.fillStyle = '#D2A679';
+      ctx.fillRect(headX-4, headY+10, 8, 8);
+      // Head shape
+      ctx.beginPath(); ctx.arc(headX, headY, 14, 0, Math.PI*2);
+      ctx.fillStyle = '#D2A679'; ctx.fill();
+      // Slicked back dark hair
+      ctx.fillStyle = '#1a1a1a';
+      ctx.beginPath();
+      ctx.arc(headX, headY-3, 14, Math.PI*1.1, Math.PI*1.9);
+      ctx.fill();
+      ctx.fillRect(headX-13, headY-8, 26, 6);
+      // Side hair
+      ctx.fillRect(headX-14, headY-6, 4, 10);
+      ctx.fillRect(headX+10, headY-6, 4, 10);
+      // Eyes — stern
+      ctx.fillStyle = '#222';
+      const eyeOff = f > 0 ? 3 : -3;
+      ctx.fillRect(headX+eyeOff-2, headY-2, 4, 3);
+      ctx.fillRect(headX+eyeOff+7*f, headY-2, 4, 3);
+      // Thick angry eyebrows
+      ctx.fillStyle = '#1a1a1a';
+      ctx.fillRect(headX+eyeOff-3, headY-5, 7, 2);
+      ctx.fillRect(headX+eyeOff+5*f, headY-5, 7, 2);
+      // Smug mouth
+      ctx.strokeStyle = '#5a3a2a';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      if (r.state === 'attack') {
+        ctx.arc(headX+f*3, headY+7, 5, 0, Math.PI);
+      } else {
+        // Smirk
+        ctx.moveTo(headX-4+f*3, headY+7);
+        ctx.quadraticCurveTo(headX+f*3, headY+10, headX+6+f*3, headY+6);
+      }
+      ctx.stroke();
+
+      // === ARMS + ATTACKS ===
+      const armY = bodyTop + 10;
+
+      if (r.state === 'attack' && atk) {
+        if (atk === 'punch') {
+          // Briefcase swing!
+          const ext = 20 + atkProgress * 40;
+          ctx.fillStyle = '#1a1a2e';
+          ctx.fillRect(bx+28, armY+2, f*ext*0.6, 8);
+          // Briefcase
+          ctx.fillStyle = '#5a3a1a';
+          ctx.fillRect(bx+28+f*ext-8, armY-6, 18, 16);
+          ctx.fillStyle = '#8B6914';
+          ctx.fillRect(bx+28+f*ext-6, armY-4, 14, 12);
+          // Handle
+          ctx.strokeStyle = '#3a2a0a';
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.arc(bx+28+f*ext+1, armY-8, 5, Math.PI, 0);
+          ctx.stroke();
+          // Gold clasp
+          ctx.fillStyle = '#FFD700';
+          ctx.fillRect(bx+28+f*ext-2, armY+1, 6, 3);
+        }
+        else if (atk === 'laser') {
+          // Phone call — money beam
+          ctx.fillStyle = '#1a1a2e';
+          ctx.fillRect(bx+28, armY, f*20, 8);
+          // Phone
+          ctx.fillStyle = '#222';
+          ctx.fillRect(bx+28+f*18, armY-4, 6, 14);
+          if (atkProgress > 0.35) {
+            // Money beam — green
+            ctx.strokeStyle = '#22cc44';
+            ctx.lineWidth = 4 + Math.sin(r.frame*0.5)*2;
+            ctx.beginPath(); ctx.moveTo(bx+28+f*24, armY+5);
+            ctx.lineTo(bx+28+f*140, armY+5); ctx.stroke();
+            ctx.strokeStyle = '#88ff88';
+            ctx.lineWidth = 2;
+            ctx.beginPath(); ctx.moveTo(bx+28+f*24, armY+5);
+            ctx.lineTo(bx+28+f*140, armY+5); ctx.stroke();
+            // Dollar signs along beam
+            ctx.fillStyle = '#22cc44';
+            ctx.font = 'bold 10px monospace';
+            for (let d = 40; d < 120; d += 30) {
+              ctx.fillText('$', bx+28+f*d, armY+9);
+            }
+          } else {
+            ctx.fillStyle = 'rgba(34,204,68,' + (atkProgress*2) + ')';
+            ctx.beginPath(); ctx.arc(bx+28+f*24, armY+5, 6+atkProgress*8, 0, Math.PI*2); ctx.fill();
+          }
+        }
+        else if (atk === 'slam') {
+          // Desk slam — both fists
+          const up = Math.sin(atkProgress * Math.PI);
+          ctx.fillStyle = '#1a1a2e';
+          ctx.fillRect(bx+10, armY-up*40, 12, 8);
+          ctx.fillRect(bx+34, armY-up*40, 12, 8);
+          // Fists with rings
+          ctx.fillStyle = '#D2A679';
+          ctx.fillRect(bx+8, armY-up*40-6, 16, 10);
+          ctx.fillRect(bx+32, armY-up*40-6, 16, 10);
+          // Gold rings
+          ctx.fillStyle = '#FFD700';
+          ctx.fillRect(bx+12, armY-up*40-7, 4, 3);
+          ctx.fillRect(bx+40, armY-up*40-7, 4, 3);
+          // Ground impact — money explosion
+          if (atkProgress > 0.7) {
+            ctx.fillStyle = 'rgba(34,204,68,0.3)';
+            ctx.beginPath(); ctx.ellipse(bx+28, FLOOR_Y, 50, 10, 0, 0, Math.PI*2); ctx.fill();
+            ctx.fillStyle = '#22cc44';
+            ctx.font = 'bold 8px monospace';
+            ctx.fillText('$$$', bx+10, FLOOR_Y-5);
+            ctx.fillText('$$$', bx+35, FLOOR_Y-5);
+          }
+        }
+        else if (atk === 'rocket') {
+          // Throws money stack
+          ctx.fillStyle = '#1a1a2e';
+          ctx.fillRect(bx+28, armY+2, f*18, 8);
+          if (atkProgress > 0.3) {
+            const rx = bx+28+f*(20 + (atkProgress-0.3)*120);
+            // Stack of bills
+            ctx.fillStyle = '#22aa44';
+            ctx.fillRect(rx, armY-3, f*14, 14);
+            ctx.fillStyle = '#118833';
+            ctx.fillRect(rx+f*2, armY-1, f*10, 10);
+            // $ sign
+            ctx.fillStyle = '#fff';
+            ctx.font = 'bold 9px monospace';
+            ctx.textAlign = 'center';
+            ctx.fillText('$', rx+f*7, armY+8);
+            ctx.textAlign = 'left';
+            // Trail
+            ctx.fillStyle = 'rgba(34,204,68,0.4)';
+            ctx.fillRect(rx-f*20, armY+1, -f*15, 6);
+          }
+        }
+      } else {
+        // Idle arms — hands by sides
+        ctx.fillStyle = '#1a1a2e';
+        ctx.fillRect(bx+4, armY, 10, 26);
+        ctx.fillRect(bx+42, armY, 10, 26);
+        // Hands
+        ctx.fillStyle = '#D2A679';
+        ctx.fillRect(bx+4, armY+24, 10, 7);
+        ctx.fillRect(bx+42, armY+24, 10, 7);
+        // Gold watch on left wrist
+        ctx.fillStyle = '#FFD700';
+        ctx.fillRect(bx+3, armY+22, 12, 3);
+      }
+
+      ctx.restore();
+    }
+
+    // ---- HELPER: star burst ----
+    function drawStar(x, y, r, c1, c2) {
+      for (let i = 0; i < 8; i++) {
+        const a = (i/8) * Math.PI * 2;
+        ctx.strokeStyle = i%2===0 ? c1 : c2;
+        ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.moveTo(x, y);
+        ctx.lineTo(x + Math.cos(a)*r, y + Math.sin(a)*r);
+        ctx.stroke();
+      }
+    }
+
+    // ---- PARTICLES ----
+    let particles = [];
+
+    function spawnParticles(x, y, count, color, spread, speed) {
+      for (let i = 0; i < count; i++) {
+        particles.push({
+          x, y,
+          vx: (Math.random()-0.5) * (spread||6) * (speed||1),
+          vy: (Math.random()-1) * 4 * (speed||1),
+          life: 18 + Math.random()*18,
+          maxLife: 36,
+          color,
+          size: 2 + Math.random()*3
+        });
+      }
+    }
+
+    function spawnText(x, y, text, color) {
+      particles.push({
+        x, y, vx: 0, vy: -1.5,
+        life: 40, maxLife: 40,
+        color, text, size: 0
+      });
+    }
+
+    function updateParticles() {
+      for (let i = particles.length-1; i >= 0; i--) {
+        const p = particles[i];
+        p.x += p.vx; p.y += p.vy;
+        if (!p.text) p.vy += 0.15;
+        p.life--;
+        if (p.life <= 0) particles.splice(i, 1);
+      }
+    }
+
+    function drawParticles() {
+      for (const p of particles) {
+        const alpha = Math.max(0, p.life / p.maxLife);
+        ctx.globalAlpha = alpha;
+        if (p.text) {
+          ctx.fillStyle = p.color;
+          ctx.font = 'bold 11px "Press Start 2P", monospace';
+          ctx.textAlign = 'center';
+          ctx.fillText(p.text, p.x, p.y);
+        } else {
+          ctx.fillStyle = p.color;
+          ctx.fillRect(p.x - p.size/2, p.y - p.size/2, p.size, p.size);
+        }
+      }
+      ctx.globalAlpha = 1;
+    }
+
+    // ---- HIT DETECTION ----
+    function getAttackBox(fighter, atkDef) {
+      const range = atkDef ? atkDef.range : 50;
+      const hh = atkDef ? atkDef.h : 35;
+      const cx = fighter.x + 28;
+      const cy = fighter.y + 35;
+      if (fighter.facing === 1) {
+        return { x: cx, y: cy - hh/2, w: range, h: hh };
+      } else {
+        return { x: cx - range, y: cy - hh/2, w: range, h: hh };
+      }
+    }
+
+    function getBodyBox(fighter) {
+      return { x: fighter.x + 8, y: fighter.y + 5, w: 40, h: 88 };
+    }
+
+    function boxOverlap(a, b) {
+      return a.x < b.x+b.w && a.x+a.w > b.x && a.y < b.y+b.h && a.y+a.h > b.y;
+    }
+
+    // ---- SAVTA AI ----
+    let savtaAiTimer = 0, savtaAiAction = 'idle';
+
+    function updateSavtaAI() {
+      savtaAiTimer--;
+      if (savtaAiTimer <= 0) {
+        const dist = Math.abs(savta.x - robot.x);
+        const r = Math.random();
+        const hpRatio = savta.hp / savta.maxHp;
+
+        if (dist > 120) {
+          savtaAiAction = 'approach';
+          savtaAiTimer = 20 + Math.random()*15;
+        } else if (dist < 70) {
+          const atkNames = Object.keys(ATTACKS);
+          if (r < 0.35 && savta.attackCooldown <= 0) {
+            savtaAiAction = atkNames[Math.floor(Math.random()*atkNames.length)];
+            savtaAiTimer = 20;
+          } else if (r < 0.55) {
+            savtaAiAction = 'retreat';
+            savtaAiTimer = 18 + Math.random()*12;
+          } else if (r < 0.7 && hpRatio < 0.5) {
+            savtaAiAction = 'block';
+            savtaAiTimer = 25 + Math.random()*20;
+          } else {
+            savtaAiAction = 'idle';
+            savtaAiTimer = 10 + Math.random()*10;
+          }
+        } else {
+          if (r < 0.4) {
+            savtaAiAction = 'approach';
+            savtaAiTimer = 20;
+          } else if (r < 0.65 && savta.attackCooldown <= 0) {
+            // Prefer ranged attacks from distance
+            savtaAiAction = Math.random() < 0.5 ? 'kick' : 'mega';
+            savtaAiTimer = 20;
+          } else {
+            savtaAiAction = 'idle';
+            savtaAiTimer = 15;
+          }
+        }
+      }
+
+      savta.facing = robot.x < savta.x ? -1 : 1;
+
+      if (savta.state === 'hit' || savta.state === 'attack') return;
+
+      savta.blocking = savtaAiAction === 'block';
+
+      if (savtaAiAction === 'approach') {
+        savta.vx = savta.facing * 2;
+      } else if (savtaAiAction === 'retreat') {
+        savta.vx = -savta.facing * 1.8;
+      } else if (ATTACKS[savtaAiAction] && savta.attackCooldown <= 0) {
+        const aDef = ATTACKS[savtaAiAction];
+        if (savta.ki >= aDef.kiCost) {
+          savta.state = 'attack';
+          savta.attackType = savtaAiAction;
+          savta.stateTimer = aDef.frames;
+          savta.attackCooldown = aDef.cooldown;
+          savta.ki -= aDef.kiCost;
+          savta.vx = 0;
+        }
+        savtaAiAction = 'idle';
+      } else {
+        savta.vx = 0;
+      }
+    }
+
+    // ---- UPDATE FIGHTER ----
+    let hitChecked = {};
+
+    function updateFighter(f, isPlayer) {
+      f.frame++;
+      if (f.attackCooldown > 0) f.attackCooldown--;
+      if (f.hitCooldown > 0) f.hitCooldown--;
+      if (f.shakeTimer > 0) f.shakeTimer--;
+      if (f.blockTimer > 0) f.blockTimer--;
+
+      // Attack state
+      if (f.state === 'attack' && f.attackType) {
+        f.stateTimer--;
+        const aDef = isPlayer ? ROBOT_ATTACKS[f.attackType] : ATTACKS[f.attackType];
+        const tag = isPlayer ? 'p' : 'r';
+
+        if (aDef && f.stateTimer === (aDef.frames - aDef.hitFrame) && !hitChecked[tag]) {
+          hitChecked[tag] = true;
+          const atkBox = getAttackBox(f, aDef);
+          const target = isPlayer ? savta : robot;
+          const tBox = getBodyBox(target);
+
+          if (boxOverlap(atkBox, tBox) && target.hitCooldown <= 0) {
+            let dmg = aDef.dmg[0] + Math.random() * (aDef.dmg[1] - aDef.dmg[0]);
+
+            // Block reduces damage
+            if (target.blocking) {
+              dmg *= 0.25;
+              spawnText(target.x+28, target.y-10, 'BLOCK!', '#44aaff');
+              spawnParticles(target.x+28, target.y+30, 4, '#4488ff', 3, 0.5);
+              target.blockTimer = 8;
+            } else {
+              target.hp -= dmg;
+              target.state = 'hit';
+              target.attackType = null;
+              target.stateTimer = 14;
+              target.hitCooldown = 16;
+              target.vx = f.facing * aDef.knockback;
+
+              const hx = target.x + 28;
+              const hy = target.y + 35;
+              spawnParticles(hx, hy, 10, isPlayer ? '#75b8ff' : '#ff4444', 8, 1.2);
+
+              // Combo counter
+              if (isPlayer) {
+                robot.comboCount++;
+                if (robot.comboCount > 1) {
+                  spawnText(hx, hy-30, robot.comboCount + ' HIT!', '#FFD700');
+                }
+              }
+
+              // Damage text
+              spawnText(hx, hy - 15, Math.round(dmg) + '', isPlayer ? '#ffff44' : '#ff6644');
+
+              // Screen shake
+              target.shakeTimer = 6;
+            }
+          }
+        }
+
+        if (f.stateTimer <= 0) {
+          f.state = 'idle';
+          f.attackType = null;
+          hitChecked[isPlayer ? 'p' : 'r'] = false;
+        }
+      } else if (f.state === 'hit') {
+        f.stateTimer--;
+        if (f.stateTimer <= 0) f.state = 'idle';
+        if (isPlayer) robot.comboCount = 0;
+      }
+
+      // Gravity
+      if (f.y < FLOOR_Y) {
+        f.vy += GRAVITY;
+        f.y += f.vy;
+        if (f.y >= FLOOR_Y) { f.y = FLOOR_Y; f.vy = 0; }
+      }
+
+      // Player movement
+      if (isPlayer && f.state !== 'hit') {
+        if (f.state !== 'attack') {
+          f.vx = 0;
+          if (keys['ArrowRight'] || keys['d']) f.vx = 3;
+          if (keys['ArrowLeft'] || keys['a']) f.vx = -3;
+          f.blocking = keys['ArrowDown'] || keys['s'];
+          // Jump
+          if ((keys['ArrowUp'] || keys['w']) && f.y >= FLOOR_Y) {
+            f.vy = -10;
+            f.y -= 1;
+          }
+        }
+        f.facing = savta.x > robot.x ? 1 : -1;
+      }
+
+      f.x += f.vx;
+      if (f.state === 'hit') f.vx *= 0.88;
+
+      // Bounds
+      if (f.x < 20) f.x = 20;
+      if (f.x > W - 76) f.x = W - 76;
+
+      // KI regen (savta AI needs KI for her attacks)
+      if (!isPlayer && f.ki < f.maxKi) f.ki += 0.08;
+    }
+
+    // ---- SCREEN SHAKE ----
+    function getShake() {
+      const sh = Math.max(savta.shakeTimer, robot.shakeTimer);
+      if (sh <= 0) return [0,0];
+      return [(Math.random()-0.5)*sh, (Math.random()-0.5)*sh];
+    }
+
+    // ---- GAME LOOP ----
+    function gameLoop() {
+      if (!gameRunning) return;
+
+      const shake = getShake();
+      ctx.save();
+      ctx.translate(shake[0], shake[1]);
+      ctx.clearRect(-10, -10, W+20, H+20);
+      drawBackground();
+
+      // Update — player controls the Businessman (robot), Savta is AI
+      updateFighter(robot, true);
+      updateSavtaAI();
+      updateFighter(savta, false);
+      updateParticles();
+
+      // Player attack input — controls the Businessman
+      if (robot.state === 'idle' && robot.attackCooldown <= 0 && !robot.blocking && robot.y >= FLOOR_Y) {
+        let chosen = null;
+        if (keysJust['z'] || keysJust['Z'] || keysJust['ת']) chosen = 'punch';
+        else if (keysJust['x'] || keysJust['X'] || keysJust['ס']) chosen = 'laser';
+        else if (keysJust['c'] || keysJust['C'] || keysJust['ב']) chosen = 'slam';
+        else if (keysJust['v'] || keysJust['V'] || keysJust['ה']) chosen = 'rocket';
+
+        if (chosen) {
+          const aDef = ROBOT_ATTACKS[chosen];
+          robot.state = 'attack';
+          robot.attackType = chosen;
+          robot.stateTimer = aDef.frames;
+          robot.attackCooldown = aDef.cooldown;
+          robot.vx = 0;
+        }
+      }
+
+      // Draw fighters (back first)
+      if (savta.x < robot.x) { drawSavta(savta); drawRobot(robot); }
+      else { drawRobot(robot); drawSavta(savta); }
+
+      drawParticles();
+      ctx.restore();
+
+      // HUD (outside shake)
+      // Player (Businessman) bars — left side
+      drawBar(16, 14, 240, 14, robot.hp, robot.maxHp, ['#22cc44','#ddaa00','#ee2222'], 'STAMINA');
+      // Savta (AI) bars — right side
+      drawBar(W-256, 14, 240, 14, savta.hp, savta.maxHp, ['#ee4444','#ddaa00','#ee2222'], 'STAMINA');
+      drawBar(W-256, 42, 240, 10, savta.ki, savta.maxKi, ['#4488ff','#4488ff','#4488ff'], 'KI');
+      // Names
+      ctx.fillStyle = '#88ccff';
+      ctx.font = '9px "Press Start 2P", monospace';
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'top';
+      ctx.fillText('YOU', 18, 64);
+      ctx.fillStyle = '#ff6666';
+      ctx.textAlign = 'right';
+      ctx.fillText('SAVTA', W-18, 64);
+
+      // Round label
+      ctx.fillStyle = '#FFD700';
+      ctx.font = '8px "Press Start 2P", monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText('ROUND 1', W/2, 14);
+
+      // Controls hint
+      ctx.fillStyle = 'rgba(255,255,255,0.3)';
+      ctx.font = '6px "Press Start 2P", monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText('Z briefcase  X money-beam  C slam  V throw-money  ←→ move  ↑ jump  ↓ block', W/2, H-6);
+
+      // Win/lose check
+      if (robot.hp <= 0) { endFight(false); return; }
+      if (savta.hp <= 0) { endFight(true); return; }
+
+      // Clear just-pressed
+      Object.keys(keysJust).forEach(k => keysJust[k] = false);
+
+      animFrame = requestAnimationFrame(gameLoop);
+    }
+
+    // ---- START / END ----
+    function startFightGame() {
+      overlay.classList.add('active');
+      intro.style.display = 'flex';
+      resultScreen.classList.remove('active');
+      introActive = true;
+      gameOver = false;
+
+      robot = makeFighter(160, 1);  // Player (Businessman) — left side
+      savta = makeFighter(540, -1); // AI (Savta) — right side
+      savta.ki = 25;
+      particles = [];
+      hitChecked = {};
+      savtaAiTimer = 0;
+      savtaAiAction = 'idle';
+
+      // Preview render
+      ctx.clearRect(0, 0, W, H);
+      drawBackground();
+      drawSavta(savta);
+      drawRobot(robot);
+      drawBar(16,14,240,14,100,100,['#22cc44','#ddaa00','#ee2222'],'STAMINA');
+      drawBar(W-256,14,240,14,100,100,['#ee4444','#ddaa00','#ee2222'],'STAMINA');
+      drawBar(W-256,42,240,10,25,50,['#4488ff','#4488ff','#4488ff'],'KI');
+    }
+    window.startFightGame = startFightGame;
+
+    function showTutorial() {
+      intro.style.display = 'none';
+      introActive = false;
+      const tut = document.getElementById('fightTutorial');
+      tut.classList.add('active');
+      tutorialActive = true;
+    }
+
+    function beginFight() {
+      intro.style.display = 'none';
+      introActive = false;
+      const tut = document.getElementById('fightTutorial');
+      tut.classList.remove('active');
+      tutorialActive = false;
+      gameRunning = true;
+      gameLoop();
+    }
+
+    function endFight(playerWon) {
+      gameRunning = false;
+      gameOver = true;
+      if (animFrame) cancelAnimationFrame(animFrame);
+
+      if (playerWon) {
+        resultText.textContent = 'YOU WIN!';
+        resultText.style.color = '#33ff33';
+        resultSub.textContent = 'סבתא: "אויויוי... הגב שלי... איך הפסדתי?! מסי היה עושה אותך סלט!!"';
+        resultSub.style.color = '#75b8ff';
+      } else {
+        resultText.textContent = 'SAVTA WINS!';
+        resultText.style.color = '#ff3333';
+        resultSub.textContent = 'סבתא: "ואמוס קאראחו!! 3,000 שנה של ניסיון יא מניאק!! מסי גאה בי!!"';
+        resultSub.style.color = '#ff8888';
+      }
+      resultScreen.classList.add('active');
+    }
+
+    function exitFight() {
+      overlay.classList.remove('active');
+      gameRunning = false;
+      gameOver = false;
+      introActive = false;
+      tutorialActive = false;
+      const tut = document.getElementById('fightTutorial');
+      if (tut) tut.classList.remove('active');
+      if (animFrame) cancelAnimationFrame(animFrame);
+      chatMsgCount = 0;
+      fightPhase = 0;
+      if (typeof addTermLine === 'function') {
+        addTermLine('system', '[ סבתא חזרה מהקרב. הגב שלה הורג אותה. MALDICION! עדיין אוהבת את מסי. ואמוס! ]');
+      }
+    }
+
+    // ---- INPUT ----
+    document.addEventListener('keydown', e => {
+      if (!keys[e.key]) keysJust[e.key] = true;
+      keys[e.key] = true;
+
+      if (overlay.classList.contains('active')) {
+        // Prevent scrolling in fight mode
+        if (['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' '].includes(e.key)) {
+          e.preventDefault();
+        }
+      }
+
+      if (introActive && e.key === 'Enter') { e.preventDefault(); showTutorial(); return; }
+      if (tutorialActive && !introActive) { e.preventDefault(); beginFight(); return; }
+      if (gameOver && e.key === 'Enter') { e.preventDefault(); exitFight(); }
+      if (overlay.classList.contains('active') && e.key === 'Escape') exitFight();
+    });
+    document.addEventListener('keyup', e => {
+      keys[e.key] = false;
+      keysJust[e.key] = false;
+    });
+
+  })();
+
+  // Fight steering is now integrated into handleTermKeydown in the main script.
   </script>
 </body>
 </html>
