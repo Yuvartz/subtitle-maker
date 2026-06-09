@@ -2331,11 +2331,13 @@
       try { localStorage.setItem('submaker-theme', name); } catch(e) {}
     }
     window.setTheme = setTheme;
-    // Default to hitech; load saved preference
+    // The app ALWAYS boots to the Hi-Tech interface.
+    // The Terminal/chat must never auto-open on load — it opens only via the
+    // easter egg ("עומר זייטמן נשמה") or by clicking the unlocked Terminal button.
+    // Saved preference is honored for the normal themes only (hitech/alien/cyberpunk).
     try {
       const saved = localStorage.getItem('submaker-theme');
       if (saved && saved !== 'terminal') setTheme(saved);
-      else if (saved === 'terminal' && localStorage.getItem('submaker-terminal-unlocked')) setTheme('terminal');
       else setTheme('hitech');
     } catch(e) { setTheme('hitech'); }
 
