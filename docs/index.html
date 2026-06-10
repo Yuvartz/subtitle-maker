@@ -3366,7 +3366,7 @@
         attackCooldown: 0, hitCooldown: 0,
         blocking: false, blockTimer: 0,
         frame: 0, comboCount: 0, lastHitBy: '',
-        shakeTimer: 0
+        shakeTimer: 0, wheelAngle: 0
       };
     }
 
@@ -3532,16 +3532,87 @@
       ctx.fillStyle = 'rgba(0,0,0,0.25)';
       ctx.beginPath(); ctx.ellipse(bx+28, FLOOR_Y+6, 30, 7, 0, 0, Math.PI*2); ctx.fill();
 
-      // === LEGS (slightly bent for hunched look) ===
-      const walk = s.vx !== 0 ? Math.sin(s.frame * 0.25) * 5 : 0;
-      ctx.fillStyle = '#2a2a2a';
-      // Legs angled slightly inward for old-person stance
-      ctx.fillRect(bx+16, by+64, 9, 26 + walk);
-      ctx.fillRect(bx+31, by+64, 9, 26 - walk);
-      // Worn shoes
-      ctx.fillStyle = '#3a3a3a';
-      ctx.fillRect(bx+14, by+88+walk, 13, 6);
-      ctx.fillRect(bx+29, by+88-walk, 13, 6);
+      // === WHEELCHAIR (drawn behind body) ===
+      s.wheelAngle = (s.wheelAngle || 0) + s.vx * 0.07;
+      const cw = bx + 28;            // chair center x
+      const backWX = cw - f * 9;     // big rear wheel x (behind)
+      const backWY = by + 74;        // big rear wheel y
+      const bigR = 20;
+      const frontWX = cw + f * 22;   // small caster wheel x (front)
+      const frontWY = by + 84;
+      const smallR = 7;
+
+      // -- Footrest bar (front) --
+      ctx.strokeStyle = '#888a90';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(cw + f*6, by+58);
+      ctx.lineTo(frontWX + f*4, by+80);
+      ctx.stroke();
+      // Footplate
+      ctx.fillStyle = '#5a5d63';
+      ctx.fillRect(frontWX - 6, by+80, 16, 4);
+
+      // -- Little feet on the footplate (slippers) --
+      ctx.fillStyle = '#caa';
+      ctx.fillRect(cw + f*10, by+72, 9, 9);
+      ctx.fillStyle = '#b59';
+      ctx.fillRect(cw + f*10 + (f>0?6:0), by+76, 6, 5);
+
+      // -- Seat frame --
+      const seatGrad = ctx.createLinearGradient(0, by+54, 0, by+64);
+      seatGrad.addColorStop(0, '#3a3d44'); seatGrad.addColorStop(1, '#23252b');
+      ctx.fillStyle = seatGrad;
+      ctx.fillRect(cw - 22, by+56, 44, 8);
+
+      // -- Backrest (behind, on -f side) --
+      ctx.fillStyle = '#2b2d33';
+      ctx.save();
+      ctx.translate(cw - f*20, by+30);
+      ctx.fillRect(-3, 0, 6, 32);
+      ctx.restore();
+      // Push handle
+      ctx.fillStyle = '#3a3d44';
+      ctx.fillRect(cw - f*23, by+26, f*8, 5);
+
+      // -- Armrest (front, on +f side) --
+      ctx.fillStyle = '#3a3d44';
+      ctx.fillRect(cw + (f>0?6:-22), by+44, 16, 4);
+      ctx.fillRect(cw + f*18 - (f>0?0:3), by+44, 3, 14);
+
+      // -- Chrome frame strut to wheel --
+      ctx.strokeStyle = '#9a9da3';
+      ctx.lineWidth = 3;
+      ctx.beginPath(); ctx.moveTo(cw - f*4, by+60); ctx.lineTo(backWX, backWY); ctx.stroke();
+
+      // ---- BIG REAR WHEEL (3D-ish, with spokes + rim highlight) ----
+      // Tyre
+      shadedSphere(backWX, backWY, bigR, '#15161a', '#3a3c42');
+      ctx.lineWidth = 4; ctx.strokeStyle = '#0c0d10';
+      ctx.beginPath(); ctx.arc(backWX, backWY, bigR-2, 0, Math.PI*2); ctx.stroke();
+      // Chrome hand-rim
+      ctx.lineWidth = 2; ctx.strokeStyle = '#c8ccd2';
+      ctx.beginPath(); ctx.arc(backWX, backWY, bigR-6, 0, Math.PI*2); ctx.stroke();
+      // Spokes (rotate)
+      ctx.strokeStyle = '#b8bcc4'; ctx.lineWidth = 2;
+      for (let k = 0; k < 6; k++) {
+        const a = s.wheelAngle + k * Math.PI / 3;
+        ctx.beginPath();
+        ctx.moveTo(backWX, backWY);
+        ctx.lineTo(backWX + Math.cos(a)*(bigR-7), backWY + Math.sin(a)*(bigR-7));
+        ctx.stroke();
+      }
+      // Hub
+      shadedSphere(backWX, backWY, 4, '#555', '#aaa');
+
+      // ---- SMALL FRONT CASTER ----
+      shadedSphere(frontWX, frontWY, smallR, '#15161a', '#33353b');
+      ctx.strokeStyle = '#888'; ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.arc(frontWX, frontWY, smallR-2, 0, Math.PI*2); ctx.stroke();
+      shadedSphere(frontWX, frontWY, 2.5, '#666', '#bbb');
+      // Caster fork
+      ctx.strokeStyle = '#9a9da3'; ctx.lineWidth = 2.5;
+      ctx.beginPath(); ctx.moveTo(frontWX, frontWY-smallR); ctx.lineTo(frontWX, by+62); ctx.stroke();
 
       // === BODY — Argentina stripes, hunched forward ===
       const bodyTop = by + 26; // Lower body start = more hunched
@@ -3552,7 +3623,9 @@
         ctx.fillStyle = i % 10 === 0 ? '#75b8ff' : '#fff';
         ctx.fillRect(bx+10, bodyTop+i, 36, 5);
       }
-      // Number 10
+      // 3D cylinder shading over the jersey
+      cylinderShade(bx+10, bodyTop, 36, 38);
+      // Number 10 (on top of shading)
       ctx.fillStyle = '#111';
       ctx.font = 'bold 13px monospace';
       ctx.textAlign = 'center';
@@ -3562,14 +3635,11 @@
       // === HUNCHED BACK (curved spine bump) ===
       // Draw a hump on the back
       const backSide = -f; // Opposite to facing
-      ctx.fillStyle = '#75b8ff';
+      ctx.fillStyle = '#5a9adf';
       ctx.beginPath();
       ctx.arc(bx+28+backSide*14, bodyTop+6, 10, 0, Math.PI*2);
       ctx.fill();
-      ctx.fillStyle = '#fff';
-      ctx.beginPath();
-      ctx.arc(bx+28+backSide*14, bodyTop+6, 7, 0, Math.PI*2);
-      ctx.fill();
+      shadedSphere(bx+28+backSide*14, bodyTop+6, 7, '#cfe0f4', '#ffffff');
 
       // === HEAD (lower, more forward = hunched) ===
       const headX = bx + 28 + f * 10; // More forward lean
@@ -3577,9 +3647,8 @@
       // Neck (bent forward)
       ctx.fillStyle = '#D2A679';
       ctx.fillRect(headX-4, headY+8, 8, 10);
-      // Head
-      ctx.beginPath(); ctx.arc(headX, headY, 13, 0, Math.PI*2);
-      ctx.fillStyle = '#D2A679'; ctx.fill();
+      // Head (3D shaded skin)
+      shadedSphere(headX, headY, 13, '#b8895f', '#e8c9a0');
       // White hair — messy poof
       ctx.fillStyle = '#e0e0e0';
       ctx.beginPath(); ctx.arc(headX, headY-5, 13, Math.PI*1.0, Math.PI*2.0); ctx.fill();
@@ -3761,38 +3830,29 @@
         ctx.lineWidth = 2;
         ctx.beginPath(); ctx.arc(bx+18, by+42, 25, -0.5, 0.5); ctx.stroke();
       } else {
-        // Idle — hunched, leaning on walking cane
-        // Left arm on cane
+        // Idle — seated, holding the cane across the lap ready to swing
+        // Lap hand (front)
         ctx.fillStyle = '#D2A679';
-        ctx.fillRect(bx+8+f*3, armY-2, 9, 8);
-        // Right arm hanging
-        ctx.fillRect(bx+39, armY+2, 9, 10);
+        ctx.fillRect(bx+28+f*8, armY+8, 9, 8);
+        // Rear hand gripping cane near body
+        ctx.fillRect(bx+28-f*10, armY+4, 9, 8);
 
-        // WALKING CANE — proper cane with curved handle
-        const caneX = bx + 10 + f * 6;
-        // Cane shaft
+        // Cane held diagonally across the lap
+        const gripX = bx+28 - f*8, gripY = armY+8;
+        const tipX  = bx+28 + f*30, tipY = armY-2;
         ctx.strokeStyle = '#5a3018';
         ctx.lineWidth = 5;
-        ctx.beginPath();
-        ctx.moveTo(caneX, armY+2);
-        ctx.lineTo(caneX+2, by+92);
-        ctx.stroke();
-        // Inner lighter color
+        ctx.beginPath(); ctx.moveTo(gripX, gripY); ctx.lineTo(tipX, tipY); ctx.stroke();
         ctx.strokeStyle = '#7a5028';
         ctx.lineWidth = 3;
-        ctx.beginPath();
-        ctx.moveTo(caneX, armY+2);
-        ctx.lineTo(caneX+2, by+92);
-        ctx.stroke();
-        // Curved handle on top
+        ctx.beginPath(); ctx.moveTo(gripX, gripY); ctx.lineTo(tipX, tipY); ctx.stroke();
+        // Curved handle near the rear grip
         ctx.strokeStyle = '#5a3018';
         ctx.lineWidth = 5;
-        ctx.beginPath();
-        ctx.arc(caneX, armY-4, 8, -Math.PI*0.5, Math.PI*0.6);
-        ctx.stroke();
-        // Rubber tip at bottom
+        ctx.beginPath(); ctx.arc(gripX - f*3, gripY-5, 6, Math.PI*0.2, Math.PI*1.3); ctx.stroke();
+        // Rubber tip
         ctx.fillStyle = '#333';
-        ctx.fillRect(caneX-2, by+89, 7, 5);
+        ctx.fillRect(tipX - 2, tipY - 2, 5, 5);
       }
 
       ctx.restore();
@@ -3838,6 +3898,8 @@
       suitGrad.addColorStop(1, '#1a1a2e');
       ctx.fillStyle = suitGrad;
       ctx.fillRect(bx+8, bodyTop, 40, 40);
+      // 3D volume shading on the jacket
+      cylinderShade(bx+8, bodyTop, 40, 40);
       // Lapels
       ctx.strokeStyle = '#3a3a5e';
       ctx.lineWidth = 2;
@@ -3877,9 +3939,8 @@
       // Neck
       ctx.fillStyle = '#D2A679';
       ctx.fillRect(headX-4, headY+10, 8, 8);
-      // Head shape
-      ctx.beginPath(); ctx.arc(headX, headY, 14, 0, Math.PI*2);
-      ctx.fillStyle = '#D2A679'; ctx.fill();
+      // Head shape (3D shaded skin)
+      shadedSphere(headX, headY, 14, '#b8895f', '#e8c9a0');
       // Slicked back dark hair
       ctx.fillStyle = '#1a1a1a';
       ctx.beginPath();
@@ -4063,6 +4124,42 @@
       });
     }
 
+    // ---- 3D SHADING HELPERS ----
+    // A sphere shaded with a light from the upper-left for a rounded, 3D look.
+    function shadedSphere(cx, cy, r, baseColor, lightColor) {
+      const g = ctx.createRadialGradient(cx - r*0.35, cy - r*0.4, r*0.1, cx, cy, r);
+      g.addColorStop(0, lightColor);
+      g.addColorStop(1, baseColor);
+      ctx.fillStyle = g;
+      ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI*2); ctx.fill();
+    }
+    // A vertical cylinder-style shade overlay over a rectangle (adds volume).
+    function cylinderShade(x, y, w, h) {
+      const g = ctx.createLinearGradient(x, 0, x+w, 0);
+      g.addColorStop(0,   'rgba(0,0,0,0.28)');
+      g.addColorStop(0.32,'rgba(255,255,255,0.16)');
+      g.addColorStop(0.5, 'rgba(255,255,255,0.05)');
+      g.addColorStop(1,   'rgba(0,0,0,0.32)');
+      ctx.fillStyle = g;
+      ctx.fillRect(x, y, w, h);
+    }
+
+    // ---- SAVTA BATTLE SHOUTS (she screams PUTA a lot) ----
+    const SAVTA_SHOUTS = ['PUTA!', 'PUTA!!', 'PUTAAA!', 'PUTA!', 'PUTA MADRE!', 'PUTA!', 'CARAJO!', 'PUTA!', 'BOLUDO!', 'PUTA!!', 'PUTA!', 'HIJO DE PUTA!'];
+    let savtaShoutCooldown = 0;
+    function savtaShout(force) {
+      if (!force && savtaShoutCooldown > 0) return;
+      savtaShoutCooldown = 35 + Math.random()*55;
+      const txt = SAVTA_SHOUTS[Math.floor(Math.random()*SAVTA_SHOUTS.length)];
+      particles.push({
+        x: savta.x + 28 + (Math.random()-0.5)*10,
+        y: savta.y - 18,
+        vx: (Math.random()-0.5)*0.7, vy: -1.1,
+        life: 48, maxLife: 48,
+        color: '#ff2d44', text: txt, size: 0, shout: true
+      });
+    }
+
     function updateParticles() {
       for (let i = particles.length-1; i >= 0; i--) {
         const p = particles[i];
@@ -4078,10 +4175,21 @@
         const alpha = Math.max(0, p.life / p.maxLife);
         ctx.globalAlpha = alpha;
         if (p.text) {
-          ctx.fillStyle = p.color;
-          ctx.font = 'bold 11px "Press Start 2P", monospace';
           ctx.textAlign = 'center';
-          ctx.fillText(p.text, p.x, p.y);
+          if (p.shout) {
+            // Loud, jittery red shout with black outline
+            const jx = (Math.random()-0.5)*2;
+            ctx.font = 'bold 15px "Press Start 2P", monospace';
+            ctx.lineWidth = 4;
+            ctx.strokeStyle = 'rgba(0,0,0,0.85)';
+            ctx.strokeText(p.text, p.x+jx, p.y);
+            ctx.fillStyle = p.color;
+            ctx.fillText(p.text, p.x+jx, p.y);
+          } else {
+            ctx.fillStyle = p.color;
+            ctx.font = 'bold 11px "Press Start 2P", monospace';
+            ctx.fillText(p.text, p.x, p.y);
+          }
         } else {
           ctx.fillStyle = p.color;
           ctx.fillRect(p.x - p.size/2, p.y - p.size/2, p.size, p.size);
@@ -4173,6 +4281,7 @@
           savta.attackCooldown = aDef.cooldown;
           savta.ki -= aDef.kiCost;
           savta.vx = 0;
+          savtaShout(true); // scream on every attack
         }
         savtaAiAction = 'idle';
       } else {
@@ -4218,6 +4327,7 @@
               target.stateTimer = 14;
               target.hitCooldown = 16;
               target.vx = f.facing * aDef.knockback;
+              if (target === savta) savtaShout(true); // furious when hit
 
               const hx = target.x + 28;
               const hy = target.y + 35;
@@ -4307,6 +4417,10 @@
       updateSavtaAI();
       updateFighter(savta, false);
       updateParticles();
+
+      // Savta keeps screaming PUTA throughout the fight
+      if (savtaShoutCooldown > 0) savtaShoutCooldown--;
+      if (Math.random() < 0.013) savtaShout(false);
 
       // Player attack input — controls the Businessman
       if (robot.state === 'idle' && robot.attackCooldown <= 0 && !robot.blocking && robot.y >= FLOOR_Y) {
